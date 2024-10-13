@@ -10,6 +10,10 @@
   "module": "./esm/index.js",
   "types": "./dts/index.d.ts",
   "type": "module",
+  "bin": {
+    "resolve-ts-paths": "./cjs/cli/resolve-ts-paths.cli.js",
+    "resolve-ts-paths-esm": "./esm/cli/resolve-ts-paths.cli.js"
+  },
   "exports": {
     ".": {
       "require": {
