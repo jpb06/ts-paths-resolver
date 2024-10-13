@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`validateTsConfig function > should return rootDir and paths 1`] = `
+{
+  "rootDir": "./src",
+  "tsPathAliases": {
+    "@dependencies/*": CommentArray [
+      "./src/dependencies/*",
+    ],
+    "@inputs": CommentArray [
+      "./src/workflow/inputs/index.ts",
+    ],
+    "@regex": CommentArray [
+      "./src/workflow/logic/regex/regex.ts",
+    ],
+    "@tests/mock-data": CommentArray [
+      "./src/tests/mock-data/index.ts",
+    ],
+    "@tests/mocks": CommentArray [
+      "./src/tests/mocks/index.ts",
+    ],
+  },
+}
+`;
