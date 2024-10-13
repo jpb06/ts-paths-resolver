@@ -2,7 +2,6 @@ import { exec } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import util from 'node:util';
 import { parse } from 'comment-json';
-import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { glob } from 'glob';
 import {
