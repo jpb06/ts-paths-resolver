@@ -1,0 +1,21 @@
+{
+	"extends": "./tsconfig",
+	"compilerOptions": {
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"outDir": "dist/esm",
+		"declarationDir": "dist/dts",
+		"noEmit": false,
+		"declaration": true,
+		"sourceMap": true,
+		"verbatimModuleSyntax": true
+	},
+	"exclude": [
+		"./src/tests/**/*",
+		"./src/**/*.test.ts",
+		"./src/temp",
+		"./src/build",
+		"./vite.config.mts",
+		"./src/build"
+	]
+}

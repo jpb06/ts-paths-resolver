@@ -1,0 +1,78 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`transformFileDependencies function > should call transformPathAliasesInFile for each file 1`] = `
+[
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "cjs/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "a/b/c.js",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "cjs/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "a/d.js",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "cjs/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "cool.js",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "esm/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "a/b/c.js",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "esm/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "a/d.js",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "esm/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "cool.js",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "dts/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "a/b/c.d.ts",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "dts/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "a/d.d.ts",
+    },
+  ],
+  [
+    {
+      "distPath": "./dist",
+      "entryPoint": "dts/index.js",
+      "rootDir": "./src",
+      "sourceFilePath": "cool.d.ts",
+    },
+  ],
+]
+`;

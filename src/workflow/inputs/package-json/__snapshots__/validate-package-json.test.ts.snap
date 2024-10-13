@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`validatePackageJson function > should extract data from package.json 1`] = `
+{
+  "cjsEntryPoint": "./cjs/index.js",
+  "dtsEntryPoint": "./dts/index.d.ts",
+  "esmEntryPoint": "./esm/index.js",
+}
+`;

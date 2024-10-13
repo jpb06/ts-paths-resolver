@@ -1,0 +1,24 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getFilesByEntryPoint function > should raise a GlobError if glog fails 1`] = `
+[
+  {
+    "entryPoint": "./cjs/index.js",
+    "files": [
+      "cjs",
+    ],
+  },
+  {
+    "entryPoint": "./dts/index.d.ts",
+    "files": [
+      "dts",
+    ],
+  },
+  {
+    "entryPoint": "./esm/index.js",
+    "files": [
+      "esm",
+    ],
+  },
+]
+`;

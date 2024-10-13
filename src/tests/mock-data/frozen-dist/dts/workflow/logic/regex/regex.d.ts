@@ -1,0 +1,12 @@
+export declare const regexEscape: (str: string) => string;
+export declare const sourceFileRegex: RegExp;
+export declare const captureAroundTsRegex: RegExp;
+export declare const rootDirRegex: (rootDir: string) => RegExp;
+export declare const commonjsRequireRegex: (alias: string) => RegExp;
+export declare const commonjsRequireWildcardPathRegex: (alias: string) => RegExp;
+export declare const requirePathRegex: (alias: string) => string;
+export declare const esmImportRegex: (alias: string) => RegExp;
+export declare const esmDynamicImportRegex: (alias: string) => RegExp;
+export declare const esmWildcardImportRegex: (alias: string) => RegExp;
+export declare const importPathRegex: (alias: string) => string;
+export declare const dynamicImportPathRegex: (alias: string) => RegExp;
