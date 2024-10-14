@@ -17,10 +17,12 @@
   "exports": {
     ".": {
       "require": {
-        "default": "./cjs/index.js"
+        "default": "./cjs/index.js",
+        "types": "./dts/index.d.ts"
       },
       "import": {
-        "default": "./esm/index.js"
+        "default": "./esm/index.js",
+        "types": "./dts/index.d.ts"
       }
     }
   },
