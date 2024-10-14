@@ -49,24 +49,28 @@ describe('resolveTsPaths function', () => {
   });
 
   it('should report no changes', async () => {
-    const { resolveTsPaths } = await import('./resolve-ts-paths.workflow.js');
+    const { resolveTsPathsEffect } = await import(
+      './resolve-ts-paths.workflow.js'
+    );
 
     await runPromise(
-      resolveTsPaths({ distPath, packageJsonPath, tsconfigPath }),
+      resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
     );
 
     expect(displaySuccess).toHaveBeenCalledWith(0);
   });
 
-  it('should ', async () => {
+  it('should translate import and require statements', async () => {
     await execPromise(
       'cp -R ./src/tests/mock-data/frozen-dist ./src/tests/mock-data/dist',
     );
 
-    const { resolveTsPaths } = await import('./resolve-ts-paths.workflow.js');
+    const { resolveTsPathsEffect } = await import(
+      './resolve-ts-paths.workflow.js'
+    );
 
     await runPromise(
-      resolveTsPaths({ distPath, packageJsonPath, tsconfigPath }),
+      resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
     );
 
     expect(displaySuccess).toHaveBeenCalledWith(27);
