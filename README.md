@@ -18,77 +18,11 @@
 
 Translates typescript paths aliases into relative paths.
 
-<!-- ts-paths-resolver start -->
+<!-- readme-package-icons start -->
 
 <p align="left"><a href="https://docs.github.com/en/actions" target="_blank"><img height="50" src="https://raw.githubusercontent.com/jpb06/jpb06/master/icons/GithubActions-Dark.svg" /></a>&nbsp;<a href="https://www.typescriptlang.org/docs/" target="_blank"><img height="50" src="https://raw.githubusercontent.com/jpb06/jpb06/master/icons/TypeScript.svg" /></a>&nbsp;<a href="https://nodejs.org/en/docs/" target="_blank"><img height="50" src="https://raw.githubusercontent.com/jpb06/jpb06/master/icons/NodeJS-Dark.svg" /></a>&nbsp;<a href="https://bun.sh/docs" target="_blank"><img height="50" src="https://raw.githubusercontent.com/jpb06/jpb06/master/icons/Bun-Dark.svg" /></a>&nbsp;<a href="https://biomejs.dev/guides/getting-started/" target="_blank"><img height="50" src="https://raw.githubusercontent.com/jpb06/jpb06/master/icons/Biome-Dark.svg" /></a>&nbsp;<a href="https://vitest.dev/guide/" target="_blank"><img height="50" src="https://raw.githubusercontent.com/jpb06/jpb06/master/icons/Vitest-Dark.svg" /></a>&nbsp;<a href="https://www.effect.website/docs/quickstart" target="_blank"><img height="50" src="https://raw.githubusercontent.com/jpb06/jpb06/master/icons/Effect-Dark.svg" /></a></p>
 
-<!-- ts-paths-resolver end -->
-
-## ⚡ Use case
-
-Let's say we have the following typescript config to transpile a codebase both in `cjs` and `esm`:
-
-> tsconfig.json
-
-```json
-{
-  "compilerOptions": {
-    // ...
-    "rootDir": "./src",
-    "paths": {
-      "@dependencies/*": ["./src/dependencies/*"],
-      "@regex": ["./src/util/regex/regex.ts"]
-    }
-  }
-}
-```
-
-> tsconfig.cjs.json
-
-```json
-{
-  "extends": "./tsconfig",
-  "compilerOptions": {
-    // ...
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "outDir": "dist/cjs"
-  }
-}
-```
-
-> tsconfig.esm.json
-
-```json
-{
-  "extends": "./tsconfig",
-  "compilerOptions": {
-    // ...
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "dist/esm"
-  }
-}
-```
-
-Our transpilation output would then look like this, that we can reflect in `package.json` to define cjs, esm, and declarations entry point:
-
-- `./dist/cjs` -> commonjs transpiled code
-- `./dist/esm` -> esmodules transpiled code
-- `./dist/dts` -> declaration files
-
-> package.json
-
-```json
-{
-  "main": "./cjs/index.js",
-  "module": "./esm/index.js",
-  "types": "./dts/index.d.ts"
-  // ...
-}
-```
-
-This module takes these inputs (typescript config, entry points), and translates paths aliases import/require statements into relative paths.
+<!-- readme-package-icons end -->
 
 ## ⚡ Usage
 
@@ -158,4 +92,45 @@ await Effect.runPromise(
     packageJsonPath,
   })
 );
+```
+
+## ⚡ Required inputs
+
+This module takes the following input to translate paths aliases import/require statements into relative paths within a folder.
+
+### 🧿 dist folder
+
+The transpiled code location.
+
+### 🧿 `tsconfig.json`
+
+- `rootDir`: Root folder within your source files.
+- `paths`: 1 set of entries that re-map imports to additional lookup locations.
+
+```json
+{
+  "compilerOptions": {
+    // ...
+    "rootDir": "./src",
+    "paths": {
+      "@dependencies/*": ["./src/dependencies/*"],
+      "@regex": ["./src/util/regex/regex.ts"]
+    }
+  }
+}
+```
+
+### 🧿 `package.json`
+
+- `main`: `cjs` entry point.
+- `module`: `esm` entry point.
+- `types`: declaration files entry point.
+
+```json
+{
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "types": "./dts/index.d.ts"
+  // ...
+}
 ```
