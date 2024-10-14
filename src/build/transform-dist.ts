@@ -1,9 +1,9 @@
 import { runPromise } from 'effect-errors';
 
-import { resolveTsPaths } from '../workflow/resolve-ts-paths.workflow.js';
+import { resolveTsPathsEffect } from '../workflow/resolve-ts-paths.workflow.js';
 
 await runPromise(
-  resolveTsPaths({
+  resolveTsPathsEffect({
     distPath: './dist',
     packageJsonPath: './package.json',
     tsconfigPath: './tsconfig.json',

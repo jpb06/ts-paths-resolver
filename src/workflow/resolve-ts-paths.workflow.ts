@@ -12,7 +12,7 @@ export type ResolveTsPathsArgs = {
   packageJsonPath: string;
 };
 
-export const resolveTsPaths = ({
+export const resolveTsPathsEffect = ({
   distPath,
   tsconfigPath,
   packageJsonPath,

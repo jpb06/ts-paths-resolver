@@ -12,7 +12,7 @@ interface Args {
 
 export const validateArguments = (): ResolveTsPathsArgs => {
   const argv = yargs(hideBin(process.argv))
-    .scriptName('resolveTsPaths')
+    .scriptName('resolve-ts-paths')
     .usage(
       colors.blueBright(
         '$0 -d [distPath] -tsc [tsconfigPath] -pj [packageJsonPath]',

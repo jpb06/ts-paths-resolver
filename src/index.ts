@@ -1,6 +1,10 @@
+import { Effect } from 'effect';
 import {
   type ResolveTsPathsArgs,
-  resolveTsPaths,
+  resolveTsPathsEffect,
 } from './workflow/resolve-ts-paths.workflow.js';
 
-export { resolveTsPaths, type ResolveTsPathsArgs };
+const resolveTsPaths = async (args: ResolveTsPathsArgs) =>
+  Effect.runPromise(resolveTsPathsEffect(args));
+
+export { resolveTsPaths, resolveTsPathsEffect, type ResolveTsPathsArgs };
