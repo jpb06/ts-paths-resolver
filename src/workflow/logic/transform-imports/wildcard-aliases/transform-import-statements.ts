@@ -63,7 +63,8 @@ export const transformImportStatements = (
         yield* writeFileEffect(writePath, updatedFileContent);
       }
 
-      if (!importMatch && !dynamicImportMatch) {
+      const noMatch = importMatch === null && dynamicImportMatch === null;
+      if (noMatch) {
         return undefined;
       }
 

@@ -28,7 +28,11 @@ export const transformFileAliases = (
         esmDynamicImportRegex(pathsAliases[0]),
       );
 
-      if (!requireMatch && !importMatch && !dynamicImportMatch) {
+      const noMatch =
+        requireMatch === null &&
+        importMatch === null &&
+        dynamicImportMatch === null;
+      if (noMatch) {
         return [];
       }
 

@@ -60,6 +60,7 @@ describe('resolveTsPaths function', () => {
     expect(displaySuccess).toHaveBeenCalledWith(0);
   });
 
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
   it('should translate import and require statements', async () => {
     await execPromise(
       'cp -R ./src/tests/mock-data/frozen-dist ./src/tests/mock-data/dist',
