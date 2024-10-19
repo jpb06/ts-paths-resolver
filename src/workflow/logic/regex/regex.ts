@@ -22,7 +22,7 @@ export const esmImportRegex = (alias: string) =>
   new RegExp(regexEscape(`from '${alias}'`));
 
 export const esmDynamicImportRegex = (alias: string) =>
-  new RegExp(regexEscape(`import\(["']${alias}["']\)`));
+  new RegExp(`import\\(["']${regexEscape(alias)}["']\\)`, 'g');
 
 export const esmWildcardImportRegex = (alias: string) =>
   new RegExp(`(from ')${regexEscape(alias)}(.*')`);
