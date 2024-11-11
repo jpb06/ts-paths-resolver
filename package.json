@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "comment-json": "^4.2.5",
-    "effect": "^3.10.8",
+    "effect": "^3.10.14",
     "glob": "^11.0.0",
     "picocolors": "^1.1.1",
     "yargs": "^17.7.2"
@@ -67,9 +67,9 @@
     "@vitest/coverage-v8": "^2.1.4",
     "copyfiles": "^2.4.1",
     "del-cli": "^6.0.0",
-    "effect-errors": "^1.7.26",
+    "effect-errors": "^1.7.30",
     "readme-package-icons": "^1.1.16",
-    "vite-tsconfig-paths": "^5.0.1",
+    "vite-tsconfig-paths": "^5.1.2",
     "vitest": "^2.1.4",
     "vitest-mock-extended": "^2.0.2"
   }
