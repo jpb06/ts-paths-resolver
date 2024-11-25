@@ -1,7 +1,8 @@
+import { NodeFileSystem } from '@effect/platform-node';
+import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { Effect } from 'effect';
 import {
   pathsAliasesMockData,
   transpiledCjsMockData,
@@ -29,16 +30,19 @@ describe('transformWildcardAliases function', () => {
     );
 
     const result = await runPromise(
-      transformWildcardAliases(
-        {
-          distPath,
-          rootDir,
-          entryPoint: './cjs/index.js',
-          sourceFilePath:
-            'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js',
-        },
-        pathsAliases[0],
-        'yolo my bro',
+      pipe(
+        transformWildcardAliases(
+          {
+            distPath,
+            rootDir,
+            entryPoint: './cjs/index.js',
+            sourceFilePath:
+              'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js',
+          },
+          pathsAliases[0],
+          'yolo my bro',
+        ),
+        Effect.provide(NodeFileSystem.layer),
       ),
     );
 
@@ -59,15 +63,18 @@ describe('transformWildcardAliases function', () => {
     );
 
     const result = await runPromise(
-      transformWildcardAliases(
-        {
-          distPath,
-          rootDir,
-          entryPoint: './cjs/index.js',
-          sourceFilePath,
-        },
-        pathsAliases[0],
-        transpiledCjsMockData,
+      pipe(
+        transformWildcardAliases(
+          {
+            distPath,
+            rootDir,
+            entryPoint: './cjs/index.js',
+            sourceFilePath,
+          },
+          pathsAliases[0],
+          transpiledCjsMockData,
+        ),
+        Effect.provide(NodeFileSystem.layer),
       ),
     );
 

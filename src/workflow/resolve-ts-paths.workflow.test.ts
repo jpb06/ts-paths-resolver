@@ -1,7 +1,9 @@
 import { exec } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import util from 'node:util';
+import { NodeFileSystem } from '@effect/platform-node';
 import { parse } from 'comment-json';
+import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { glob } from 'glob';
 import {
@@ -54,7 +56,10 @@ describe('resolveTsPaths function', () => {
     );
 
     await runPromise(
-      resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
+      pipe(
+        resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
+        Effect.provide(NodeFileSystem.layer),
+      ),
     );
 
     expect(displaySuccess).toHaveBeenCalledWith(0);
@@ -71,7 +76,10 @@ describe('resolveTsPaths function', () => {
     );
 
     await runPromise(
-      resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
+      pipe(
+        resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
+        Effect.provide(NodeFileSystem.layer),
+      ),
     );
 
     expect(displaySuccess).toHaveBeenCalledWith(27);

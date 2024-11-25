@@ -1,11 +1,9 @@
+import { FileSystem } from '@effect/platform/FileSystem';
 import { Effect, pipe } from 'effect';
 
-import {
-  FsError,
-  existsEffect,
-  readJsonEffect,
-} from '@dependencies/fs/index.js';
+import { readJsonEffect } from '@dependencies/fs/index.js';
 
+import { InputError } from '../errors/input.error.js';
 import { getEntryPointFor } from './get-entry-point.js';
 import type { MaybePackageJsonWithPaths } from './package-json.types.js';
 
@@ -18,10 +16,11 @@ export type EntryPoints = {
 export const validatePackageJson = (packageJsonPath: string) =>
   pipe(
     Effect.gen(function* () {
-      const packageJsonExists = yield* existsEffect(packageJsonPath);
+      const fs = yield* FileSystem;
+      const packageJsonExists = yield* fs.exists(packageJsonPath);
       if (!packageJsonExists) {
         return yield* Effect.fail(
-          new FsError({
+          new InputError({
             cause: `package.json file not found at ${packageJsonPath}`,
           }),
         );

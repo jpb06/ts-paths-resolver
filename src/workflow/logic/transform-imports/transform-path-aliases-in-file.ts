@@ -1,6 +1,5 @@
+import { FileSystem } from '@effect/platform/FileSystem';
 import { Effect, pipe } from 'effect';
-
-import { readFileAsStringEffect } from '@dependencies/fs/index.js';
 
 import { transformFileAliases } from './file-aliases/transform-file-aliases.js';
 import type {
@@ -14,7 +13,9 @@ export const transformPathAliasesInFile =
   (pathsAliases: PathsAliasesEntries) =>
     pipe(
       Effect.gen(function* () {
-        const fileContent = yield* readFileAsStringEffect(
+        const fs = yield* FileSystem;
+
+        const fileContent = yield* fs.readFileString(
           `${args.distPath}/${args.sourceFilePath}`,
         );
 

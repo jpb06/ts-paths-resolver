@@ -1,4 +1,5 @@
-import { Effect } from 'effect';
+import { NodeFileSystem } from '@effect/platform-node';
+import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -42,13 +43,16 @@ describe('transformFileDependencies function', () => {
     ];
 
     const result = await runPromise(
-      transformFileDependencies(
-        distPath,
-        {
-          rootDir: './src',
-          tsPathAliases: pathsAliasesMockData,
-        },
-        filesByEntryPoint,
+      pipe(
+        transformFileDependencies(
+          distPath,
+          {
+            rootDir: './src',
+            tsPathAliases: pathsAliasesMockData,
+          },
+          filesByEntryPoint,
+        ),
+        Effect.provide(NodeFileSystem.layer),
       ),
     );
 
