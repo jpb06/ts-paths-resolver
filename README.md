@@ -82,15 +82,20 @@ await resolveTsPaths({
 You can also import the effect:
 
 ```ts
-import { Effect } from 'effect';
+import { NodeFileSystem } from '@effect/platform-node';
+import { Effect, pipe } from 'effect';
+import { runPromise } from 'effect-errors';
 import { resolveTsPathsEffect } from 'ts-paths-resolver';
 
-await Effect.runPromise(
-  resolveTsPathsEffect({
-    distPath,
-    tsconfigPath,
-    packageJsonPath,
-  })
+await runPromise(
+  pipe(
+    resolveTsPathsEffect({
+      distPath: 'dist',
+      tsconfigPath: './tsconfig.json',
+      packageJsonPath: './package.json',
+    }),
+    Effect.provide(NodeFileSystem.layer)
+  )
 );
 ```
 
