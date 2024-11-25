@@ -4,6 +4,7 @@ import { runPromise } from 'effect-errors';
 import { describe, expect, it } from 'vitest';
 
 import { packageJsonMockData } from '@tests/mock-data';
+
 import { InputError } from '../errors/input.error.js';
 
 describe('validatePackageJson function', () => {
