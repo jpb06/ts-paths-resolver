@@ -1,6 +1,6 @@
 import { TaggedError } from 'effect/Data';
 
-export class FsError extends TaggedError('fs-error')<{
+export class InputError extends TaggedError('input-error')<{
   cause?: unknown;
   message?: string;
 }> {}

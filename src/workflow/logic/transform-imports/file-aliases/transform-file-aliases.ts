@@ -1,6 +1,6 @@
+import { FileSystem } from '@effect/platform/FileSystem';
 import { Effect, pipe } from 'effect';
 
-import { writeFileEffect } from '@dependencies/fs/index.js';
 import {
   commonjsRequireRegex,
   esmDynamicImportRegex,
@@ -56,7 +56,8 @@ export const transformFileAliases = (
         );
 
       const writePath = `${args.distPath}/${args.sourceFilePath}`;
-      yield* writeFileEffect(
+      const fs = yield* FileSystem;
+      yield* fs.writeFileString(
         `${args.distPath}/${args.sourceFilePath}`,
         fileContentWithTransformedPaths,
       );

@@ -1,6 +1,6 @@
+import { FileSystem } from '@effect/platform/FileSystem';
 import { Effect, pipe } from 'effect';
 
-import { writeFileEffect } from '@dependencies/fs/index.js';
 import { requirePathRegex } from '@regex';
 
 import { resolveFullPath } from '../../resolve-path/resolve-full-path.js';
@@ -45,7 +45,8 @@ export const transformRequireStatements = (
         `require("${resolvedPath}")`,
       );
       const writePath = `${distPath}/${sourceFilePath}`;
-      yield* writeFileEffect(writePath, fileContentWithTransformedPaths);
+      const fs = yield* FileSystem;
+      yield* fs.writeFileString(writePath, fileContentWithTransformedPaths);
 
       return writePath;
     }),

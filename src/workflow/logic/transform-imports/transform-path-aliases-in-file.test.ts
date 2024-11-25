@@ -1,10 +1,10 @@
-import { Effect, pipe } from 'effect';
+import { FileSystem } from '@effect/platform/FileSystem';
+import { Effect, Layer, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { FsError } from '@dependencies/fs/fs.error.js';
 import { pathsAliasesMockData, transpiledCjsMockData } from '@tests/mock-data';
-import { mockFs } from '@tests/mocks';
+import { WriteFileStringError } from '../../../tests/errors/write-file-string-error.js';
 
 vi.doMock('./wildcard-aliases/transform-wildcard-aliases.js');
 vi.doMock('./file-aliases/transform-file-aliases.js');
@@ -17,16 +17,18 @@ describe('transformPathAliasesInFile function', () => {
     'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
   const pathsAliases = Object.entries(pathsAliasesMockData);
 
-  const { readFile } = mockFs();
-
   beforeEach(() => {
     vi.clearAllMocks();
     vi.resetAllMocks();
   });
 
   it('should fail with a fsError if reading source fails', async () => {
-    const errorCause = 'Oh no!';
-    readFile.mockRejectedValue(errorCause);
+    const TestFileSystemlayer = Layer.succeed(
+      FileSystem,
+      FileSystem.of({
+        readFileString: () => Effect.fail(new WriteFileStringError({})),
+      } as unknown as FileSystem),
+    );
 
     const { transformPathAliasesInFile } = await import(
       './transform-path-aliases-in-file.js'
@@ -41,11 +43,11 @@ describe('transformPathAliasesInFile function', () => {
           sourceFilePath,
         })(pathsAliases[0]),
         Effect.flip,
+        Effect.provide(TestFileSystemlayer),
       ),
     );
 
-    expect(result).toBeInstanceOf(FsError);
-    expect(result.cause).toBe(errorCause);
+    expect(result).toBeInstanceOf(WriteFileStringError);
   });
 
   it('should call transformWildcardAliases', async () => {
@@ -58,7 +60,13 @@ describe('transformPathAliasesInFile function', () => {
       './file-aliases/transform-file-aliases.js'
     );
 
-    readFile.mockResolvedValueOnce(transpiledCjsMockData);
+    const TestFileSystemlayer = Layer.succeed(
+      FileSystem,
+      FileSystem.of({
+        readFileString: () => Effect.succeed(transpiledCjsMockData),
+      } as unknown as FileSystem),
+    );
+
     vi.mocked(transformWildcardAliases).mockReturnValueOnce(
       Effect.succeed(expectedResult),
     );
@@ -69,12 +77,15 @@ describe('transformPathAliasesInFile function', () => {
     );
 
     const result = await runPromise(
-      transformPathAliasesInFile({
-        distPath,
-        rootDir,
-        entryPoint,
-        sourceFilePath,
-      })(pathsAliases[0]),
+      pipe(
+        transformPathAliasesInFile({
+          distPath,
+          rootDir,
+          entryPoint,
+          sourceFilePath,
+        })(pathsAliases[0]),
+        Effect.provide(TestFileSystemlayer),
+      ),
     );
 
     expect(transformWildcardAliases).toHaveBeenCalledTimes(1);
@@ -92,7 +103,13 @@ describe('transformPathAliasesInFile function', () => {
       './file-aliases/transform-file-aliases.js'
     );
 
-    readFile.mockResolvedValueOnce(transpiledCjsMockData);
+    const TestFileSystemlayer = Layer.succeed(
+      FileSystem,
+      FileSystem.of({
+        readFileString: () => Effect.succeed(transpiledCjsMockData),
+      } as unknown as FileSystem),
+    );
+
     vi.mocked(transformWildcardAliases).mockReturnValueOnce(Effect.succeed([]));
     vi.mocked(transformFileAliases).mockReturnValueOnce(
       Effect.succeed(expectedResult),
@@ -103,12 +120,15 @@ describe('transformPathAliasesInFile function', () => {
     );
 
     const result = await runPromise(
-      transformPathAliasesInFile({
-        distPath,
-        rootDir,
-        entryPoint,
-        sourceFilePath,
-      })(pathsAliases[2]),
+      pipe(
+        transformPathAliasesInFile({
+          distPath,
+          rootDir,
+          entryPoint,
+          sourceFilePath,
+        })(pathsAliases[2]),
+        Effect.provide(TestFileSystemlayer),
+      ),
     );
 
     expect(transformWildcardAliases).toHaveBeenCalledTimes(0);

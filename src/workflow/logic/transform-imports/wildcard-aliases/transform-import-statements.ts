@@ -1,6 +1,6 @@
+import { FileSystem } from '@effect/platform/FileSystem';
 import { Effect, pipe } from 'effect';
 
-import { writeFileEffect } from '@dependencies/fs/index.js';
 import { dynamicImportPathRegex, importPathRegex } from '@regex';
 
 import { resolveFullPath } from '../../resolve-path/resolve-full-path.js';
@@ -21,6 +21,7 @@ export const transformImportStatements = (
 ) =>
   pipe(
     Effect.gen(function* () {
+      const fs = yield* FileSystem;
       let updatedFileContent = fileContent;
       const writePath = `${distPath}/${sourceFilePath}`;
 
@@ -42,7 +43,7 @@ export const transformImportStatements = (
         );
 
         updatedFileContent = fileContent.replace(fullPath, resolvedPath);
-        yield* writeFileEffect(writePath, updatedFileContent);
+        yield* fs.writeFileString(writePath, updatedFileContent);
       }
 
       const dynamicImportMatch = fileContent.match(
@@ -60,7 +61,7 @@ export const transformImportStatements = (
         );
 
         updatedFileContent = fileContent.replace(fullPath, resolvedPath);
-        yield* writeFileEffect(writePath, updatedFileContent);
+        yield* fs.writeFileString(writePath, updatedFileContent);
       }
 
       const noMatch = importMatch === null && dynamicImportMatch === null;

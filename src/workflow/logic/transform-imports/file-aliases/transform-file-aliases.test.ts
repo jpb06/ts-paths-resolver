@@ -1,18 +1,17 @@
-import { Effect, pipe } from 'effect';
+import { NodeFileSystem } from '@effect/platform-node';
+import { FileSystem } from '@effect/platform/FileSystem';
+import { Effect, Layer, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { FsError } from '@dependencies/fs/fs.error.js';
+import { WriteFileStringError } from '@tests/errors';
 import {
   pathsAliasesMockData,
   transpiledCjsMockData,
   transpiledEsmMockData,
 } from '@tests/mock-data';
-import { mockFs } from '@tests/mocks';
 
 describe('transformImportStatements function', () => {
-  const { writeFile } = mockFs();
-
   const distPath = './dist';
   const rootDir = './src';
   const pathsAliases = Object.entries(pathsAliasesMockData);
@@ -30,15 +29,18 @@ describe('transformImportStatements function', () => {
     );
 
     const result = await runPromise(
-      transformFileAliases(
-        {
-          distPath,
-          rootDir,
-          entryPoint: './cjs/index.js',
-          sourceFilePath,
-        },
-        pathsAliases[0],
-        'yolo my bro',
+      pipe(
+        transformFileAliases(
+          {
+            distPath,
+            rootDir,
+            entryPoint: './cjs/index.js',
+            sourceFilePath,
+          },
+          pathsAliases[0],
+          'yolo my bro',
+        ),
+        Effect.provide(NodeFileSystem.layer),
       ),
     );
 
@@ -54,8 +56,12 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      const errorCause = 'oh no';
-      writeFile.mockRejectedValueOnce(errorCause);
+      const TestFileSystemlayer = Layer.succeed(
+        FileSystem,
+        FileSystem.of({
+          writeFileString: () => Effect.fail(new WriteFileStringError({})),
+        } as unknown as FileSystem),
+      );
 
       const result = await Effect.runPromise(
         pipe(
@@ -70,11 +76,11 @@ describe('transformImportStatements function', () => {
             transpiledCjsMockData,
           ),
           Effect.flip,
+          Effect.provide(TestFileSystemlayer),
         ),
       );
 
-      expect(result).toBeInstanceOf(FsError);
-      expect(result.cause).toBe(errorCause);
+      expect(result).toBeInstanceOf(WriteFileStringError);
     });
 
     it('should transform file alias requires', async () => {
@@ -85,26 +91,37 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      writeFile.mockResolvedValueOnce();
+      const writeFileStringMock = vi.fn();
+      const TestFileSystemlayer = Layer.succeed(
+        FileSystem,
+        FileSystem.of({
+          writeFileString: writeFileStringMock.mockReturnValue(
+            Effect.succeed(''),
+          ),
+        } as unknown as FileSystem),
+      );
 
       const result = await runPromise(
-        transformFileAliases(
-          {
-            distPath,
-            rootDir,
-            entryPoint: './cjs/index.js',
-            sourceFilePath,
-          },
-          pathsAliases[2],
-          transpiledCjsMockData,
+        pipe(
+          transformFileAliases(
+            {
+              distPath,
+              rootDir,
+              entryPoint: './cjs/index.js',
+              sourceFilePath,
+            },
+            pathsAliases[2],
+            transpiledCjsMockData,
+          ),
+          Effect.provide(TestFileSystemlayer),
         ),
       );
 
       const expectedWritePath = `./dist/${sourceFilePath}`;
       expect(result).toStrictEqual([expectedWritePath]);
-      expect(writeFile).toHaveBeenCalledTimes(1);
-      const writePath = writeFile.mock.calls[0][0];
-      const transformedData = writeFile.mock.calls[0][1];
+      expect(writeFileStringMock).toHaveBeenCalledTimes(1);
+      const writePath = writeFileStringMock.mock.calls[0][0];
+      const transformedData = writeFileStringMock.mock.calls[0][1];
       expect(writePath).toBe(expectedWritePath);
       expect(transformedData).toContain('require("./../../regex/regex.js")');
     });
@@ -119,8 +136,12 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      const errorCause = 'Oh no';
-      writeFile.mockRejectedValueOnce(errorCause);
+      const TestFileSystemlayer = Layer.succeed(
+        FileSystem,
+        FileSystem.of({
+          writeFileString: () => Effect.fail(new WriteFileStringError({})),
+        } as unknown as FileSystem),
+      );
 
       const result = await Effect.runPromise(
         pipe(
@@ -135,11 +156,11 @@ describe('transformImportStatements function', () => {
             transpiledCjsMockData,
           ),
           Effect.flip,
+          Effect.provide(TestFileSystemlayer),
         ),
       );
 
-      expect(result).toBeInstanceOf(FsError);
-      expect(result.cause).toBe(errorCause);
+      expect(result).toBeInstanceOf(WriteFileStringError);
     });
 
     it('should transform file alias imports', async () => {
@@ -150,26 +171,37 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      writeFile.mockResolvedValueOnce();
+      const writeFileStringMock = vi.fn();
+      const TestFileSystemlayer = Layer.succeed(
+        FileSystem,
+        FileSystem.of({
+          writeFileString: writeFileStringMock.mockReturnValue(
+            Effect.succeed(''),
+          ),
+        } as unknown as FileSystem),
+      );
 
       const result = await runPromise(
-        transformFileAliases(
-          {
-            distPath,
-            rootDir,
-            entryPoint: './esm/index.js',
-            sourceFilePath,
-          },
-          pathsAliases[2],
-          transpiledEsmMockData,
+        pipe(
+          transformFileAliases(
+            {
+              distPath,
+              rootDir,
+              entryPoint: './esm/index.js',
+              sourceFilePath,
+            },
+            pathsAliases[2],
+            transpiledEsmMockData,
+          ),
+          Effect.provide(TestFileSystemlayer),
         ),
       );
 
       const expectedWritePath = `./dist/${sourceFilePath}`;
       expect(result).toStrictEqual([expectedWritePath]);
-      expect(writeFile).toHaveBeenCalledTimes(1);
-      const writePath = writeFile.mock.calls[0][0];
-      const transformedData = writeFile.mock.calls[0][1];
+      expect(writeFileStringMock).toHaveBeenCalledTimes(1);
+      const writePath = writeFileStringMock.mock.calls[0][0];
+      const transformedData = writeFileStringMock.mock.calls[0][1];
       expect(writePath).toBe(expectedWritePath);
       expect(transformedData).toContain(
         "import { requirePathRegex } from './../../regex/regex.js'",

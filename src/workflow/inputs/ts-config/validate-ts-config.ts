@@ -1,11 +1,9 @@
+import { FileSystem } from '@effect/platform/FileSystem';
 import { Effect, pipe } from 'effect';
 
-import {
-  FsError,
-  existsEffect,
-  readJsonEffect,
-} from '@dependencies/fs/index.js';
+import { readJsonEffect } from '@dependencies/fs/index.js';
 
+import { InputError } from '../errors/input.error.js';
 import { InvalidTsConfigFileError } from './invalid-ts-config.error.js';
 
 type MaybeTsConfigWithPaths = {
@@ -23,10 +21,11 @@ export type TsConfig = {
 export const validateTsConfig = (tsconfigPath: string) =>
   pipe(
     Effect.gen(function* () {
-      const tsConfigExists = yield* existsEffect(tsconfigPath);
+      const fs = yield* FileSystem;
+      const tsConfigExists = yield* fs.exists(tsconfigPath);
       if (!tsConfigExists) {
         return yield* Effect.fail(
-          new FsError({
+          new InputError({
             cause: `tsconfig.json file not found at ${tsconfigPath}`,
           }),
         );
