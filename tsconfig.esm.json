@@ -16,6 +16,7 @@
 		"./src/temp",
 		"./src/build",
 		"./vite.config.mts",
-		"./src/build"
+		"./src/build",
+		"./src/temp"
 	]
 }
