@@ -1,8 +1,8 @@
-import { FileSystem } from '@effect/platform/FileSystem';
-import { Effect, Layer, pipe } from 'effect';
+import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { describe, expect, it } from 'vitest';
 
+import { makeFsTestLayer } from '@tests/layers';
 import {
   tsconfigMockData,
   tsconfigWithoutPathsMockData,
@@ -16,21 +16,14 @@ describe('validateTsConfig function', () => {
   it('should fail is file does not exist', async () => {
     const path = './tsconfig.json';
 
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        exists: () => Effect.succeed(false),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      exists: Effect.succeed(false),
+    });
 
     const { validateTsConfig } = await import('./validate-ts-config.js');
 
     const result = await Effect.runPromise(
-      pipe(
-        validateTsConfig(path),
-        Effect.flip,
-        Effect.provide(TestFileSystemlayer),
-      ),
+      pipe(validateTsConfig(path), Effect.flip, Effect.provide(FsTestLayer)),
     );
 
     expect(result).toBeInstanceOf(InputError);
@@ -42,22 +35,15 @@ describe('validateTsConfig function', () => {
   it('should fail is tsconfig has no paths', async () => {
     const path = './tsconfig.json';
 
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        exists: () => Effect.succeed(true),
-        readFileString: () => Effect.succeed(tsconfigWithoutPathsMockData),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      exists: Effect.succeed(true),
+      readFileString: Effect.succeed(tsconfigWithoutPathsMockData),
+    });
 
     const { validateTsConfig } = await import('./validate-ts-config.js');
 
     const result = await Effect.runPromise(
-      pipe(
-        validateTsConfig(path),
-        Effect.flip,
-        Effect.provide(TestFileSystemlayer),
-      ),
+      pipe(validateTsConfig(path), Effect.flip, Effect.provide(FsTestLayer)),
     );
 
     expect(result).toBeInstanceOf(InvalidTsConfigFileError);
@@ -67,22 +53,15 @@ describe('validateTsConfig function', () => {
   it('should fail is tsconfig has no root dir', async () => {
     const path = './tsconfig.json';
 
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        exists: () => Effect.succeed(true),
-        readFileString: () => Effect.succeed(tsconfigWithoutRootDirMockData),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      exists: Effect.succeed(true),
+      readFileString: Effect.succeed(tsconfigWithoutRootDirMockData),
+    });
 
     const { validateTsConfig } = await import('./validate-ts-config.js');
 
     const result = await Effect.runPromise(
-      pipe(
-        validateTsConfig(path),
-        Effect.flip,
-        Effect.provide(TestFileSystemlayer),
-      ),
+      pipe(validateTsConfig(path), Effect.flip, Effect.provide(FsTestLayer)),
     );
 
     expect(result).toBeInstanceOf(InvalidTsConfigFileError);
@@ -92,18 +71,15 @@ describe('validateTsConfig function', () => {
   it('should return rootDir and paths', async () => {
     const path = './tsconfig.json';
 
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        exists: () => Effect.succeed(true),
-        readFileString: () => Effect.succeed(tsconfigMockData),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      exists: Effect.succeed(true),
+      readFileString: Effect.succeed(tsconfigMockData),
+    });
 
     const { validateTsConfig } = await import('./validate-ts-config.js');
 
     const result = await runPromise(
-      pipe(validateTsConfig(path), Effect.provide(TestFileSystemlayer)),
+      pipe(validateTsConfig(path), Effect.provide(FsTestLayer)),
     );
 
     expect(result).toMatchSnapshot();

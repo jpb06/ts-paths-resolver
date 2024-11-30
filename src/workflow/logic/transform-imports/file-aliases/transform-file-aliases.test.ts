@@ -1,10 +1,10 @@
 import { NodeFileSystem } from '@effect/platform-node';
-import { FileSystem } from '@effect/platform/FileSystem';
-import { Effect, Layer, pipe } from 'effect';
+import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { WriteFileStringError } from '@tests/errors';
+import { makeFsTestLayer } from '@tests/layers';
 import {
   pathsAliasesMockData,
   transpiledCjsMockData,
@@ -56,12 +56,9 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      const TestFileSystemlayer = Layer.succeed(
-        FileSystem,
-        FileSystem.of({
-          writeFileString: () => Effect.fail(new WriteFileStringError({})),
-        } as unknown as FileSystem),
-      );
+      const { FsTestLayer } = makeFsTestLayer({
+        writeFileString: Effect.fail(new WriteFileStringError({})),
+      });
 
       const result = await Effect.runPromise(
         pipe(
@@ -76,7 +73,7 @@ describe('transformImportStatements function', () => {
             transpiledCjsMockData,
           ),
           Effect.flip,
-          Effect.provide(TestFileSystemlayer),
+          Effect.provide(FsTestLayer),
         ),
       );
 
@@ -91,15 +88,9 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      const writeFileStringMock = vi.fn();
-      const TestFileSystemlayer = Layer.succeed(
-        FileSystem,
-        FileSystem.of({
-          writeFileString: writeFileStringMock.mockReturnValue(
-            Effect.succeed(''),
-          ),
-        } as unknown as FileSystem),
-      );
+      const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+        writeFileString: Effect.succeed(''),
+      });
 
       const result = await runPromise(
         pipe(
@@ -113,7 +104,7 @@ describe('transformImportStatements function', () => {
             pathsAliases[2],
             transpiledCjsMockData,
           ),
-          Effect.provide(TestFileSystemlayer),
+          Effect.provide(FsTestLayer),
         ),
       );
 
@@ -136,12 +127,9 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      const TestFileSystemlayer = Layer.succeed(
-        FileSystem,
-        FileSystem.of({
-          writeFileString: () => Effect.fail(new WriteFileStringError({})),
-        } as unknown as FileSystem),
-      );
+      const { FsTestLayer } = makeFsTestLayer({
+        writeFileString: Effect.fail(new WriteFileStringError({})),
+      });
 
       const result = await Effect.runPromise(
         pipe(
@@ -156,7 +144,7 @@ describe('transformImportStatements function', () => {
             transpiledCjsMockData,
           ),
           Effect.flip,
-          Effect.provide(TestFileSystemlayer),
+          Effect.provide(FsTestLayer),
         ),
       );
 
@@ -171,15 +159,9 @@ describe('transformImportStatements function', () => {
         './transform-file-aliases.js'
       );
 
-      const writeFileStringMock = vi.fn();
-      const TestFileSystemlayer = Layer.succeed(
-        FileSystem,
-        FileSystem.of({
-          writeFileString: writeFileStringMock.mockReturnValue(
-            Effect.succeed(''),
-          ),
-        } as unknown as FileSystem),
-      );
+      const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+        writeFileString: Effect.succeed(''),
+      });
 
       const result = await runPromise(
         pipe(
@@ -193,7 +175,7 @@ describe('transformImportStatements function', () => {
             pathsAliases[2],
             transpiledEsmMockData,
           ),
-          Effect.provide(TestFileSystemlayer),
+          Effect.provide(FsTestLayer),
         ),
       );
 
