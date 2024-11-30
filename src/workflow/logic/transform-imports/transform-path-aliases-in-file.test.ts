@@ -1,10 +1,10 @@
-import { FileSystem } from '@effect/platform/FileSystem';
-import { Effect, Layer, pipe } from 'effect';
+import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ReadFileStringError } from '@tests/errors';
+import { makeFsTestLayer } from '@tests/layers';
 import { pathsAliasesMockData, transpiledCjsMockData } from '@tests/mock-data';
-import { WriteFileStringError } from '../../../tests/errors/write-file-string-error.js';
 
 vi.doMock('./wildcard-aliases/transform-wildcard-aliases.js');
 vi.doMock('./file-aliases/transform-file-aliases.js');
@@ -23,12 +23,9 @@ describe('transformPathAliasesInFile function', () => {
   });
 
   it('should fail with a fsError if reading source fails', async () => {
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        readFileString: () => Effect.fail(new WriteFileStringError({})),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      readFileString: Effect.fail(new ReadFileStringError({})),
+    });
 
     const { transformPathAliasesInFile } = await import(
       './transform-path-aliases-in-file.js'
@@ -43,11 +40,11 @@ describe('transformPathAliasesInFile function', () => {
           sourceFilePath,
         })(pathsAliases[0]),
         Effect.flip,
-        Effect.provide(TestFileSystemlayer),
+        Effect.provide(FsTestLayer),
       ),
     );
 
-    expect(result).toBeInstanceOf(WriteFileStringError);
+    expect(result).toBeInstanceOf(ReadFileStringError);
   });
 
   it('should call transformWildcardAliases', async () => {
@@ -60,12 +57,9 @@ describe('transformPathAliasesInFile function', () => {
       './file-aliases/transform-file-aliases.js'
     );
 
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        readFileString: () => Effect.succeed(transpiledCjsMockData),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      readFileString: Effect.succeed(transpiledCjsMockData),
+    });
 
     vi.mocked(transformWildcardAliases).mockReturnValueOnce(
       Effect.succeed(expectedResult),
@@ -84,7 +78,7 @@ describe('transformPathAliasesInFile function', () => {
           entryPoint,
           sourceFilePath,
         })(pathsAliases[0]),
-        Effect.provide(TestFileSystemlayer),
+        Effect.provide(FsTestLayer),
       ),
     );
 
@@ -103,12 +97,9 @@ describe('transformPathAliasesInFile function', () => {
       './file-aliases/transform-file-aliases.js'
     );
 
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        readFileString: () => Effect.succeed(transpiledCjsMockData),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      readFileString: Effect.succeed(transpiledCjsMockData),
+    });
 
     vi.mocked(transformWildcardAliases).mockReturnValueOnce(Effect.succeed([]));
     vi.mocked(transformFileAliases).mockReturnValueOnce(
@@ -127,7 +118,7 @@ describe('transformPathAliasesInFile function', () => {
           entryPoint,
           sourceFilePath,
         })(pathsAliases[2]),
-        Effect.provide(TestFileSystemlayer),
+        Effect.provide(FsTestLayer),
       ),
     );
 

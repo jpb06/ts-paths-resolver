@@ -1,9 +1,9 @@
-import { FileSystem } from '@effect/platform/FileSystem';
-import { Effect, Layer, pipe } from 'effect';
+import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { WriteFileStringError } from '@tests/errors';
+import { makeFsTestLayer } from '@tests/layers';
 import {
   pathsAliasesMockData,
   transpiledCjsMockData,
@@ -28,15 +28,9 @@ describe('transformRequireStatements function', () => {
       './transform-require-statements.js'
     );
 
-    const writeFileStringMock = vi.fn();
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        writeFileString: writeFileStringMock.mockReturnValue(
-          Effect.succeed(''),
-        ),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+      writeFileString: Effect.succeed(''),
+    });
 
     const result = await runPromise(
       pipe(
@@ -50,7 +44,7 @@ describe('transformRequireStatements function', () => {
           pathsAliases[0],
           transpiledEsmMockData,
         ),
-        Effect.provide(TestFileSystemlayer),
+        Effect.provide(FsTestLayer),
       ),
     );
 
@@ -63,12 +57,9 @@ describe('transformRequireStatements function', () => {
     const sourceFilePath =
       'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
 
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        writeFileString: () => Effect.fail(new WriteFileStringError({})),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer } = makeFsTestLayer({
+      writeFileString: Effect.fail(new WriteFileStringError({})),
+    });
 
     const { transformRequireStatements } = await import(
       './transform-require-statements.js'
@@ -87,7 +78,7 @@ describe('transformRequireStatements function', () => {
           transpiledCjsMockData,
         ),
         Effect.flip,
-        Effect.provide(TestFileSystemlayer),
+        Effect.provide(FsTestLayer),
       ),
     );
 
@@ -99,15 +90,9 @@ describe('transformRequireStatements function', () => {
     const sourceFilePath =
       'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
 
-    const writeFileStringMock = vi.fn();
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        writeFileString: writeFileStringMock.mockReturnValue(
-          Effect.succeed(''),
-        ),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+      writeFileString: Effect.succeed(''),
+    });
 
     const { transformRequireStatements } = await import(
       './transform-require-statements.js'
@@ -125,7 +110,7 @@ describe('transformRequireStatements function', () => {
           pathsAliases[0],
           transpiledCjsMockData,
         ),
-        Effect.provide(TestFileSystemlayer),
+        Effect.provide(FsTestLayer),
       ),
     );
     const expectedWritePath = `./dist/${sourceFilePath}`;
@@ -145,15 +130,9 @@ describe('transformRequireStatements function', () => {
     const sourceFilePath =
       'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
 
-    const writeFileStringMock = vi.fn();
-    const TestFileSystemlayer = Layer.succeed(
-      FileSystem,
-      FileSystem.of({
-        writeFileString: writeFileStringMock.mockReturnValue(
-          Effect.succeed(''),
-        ),
-      } as unknown as FileSystem),
-    );
+    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+      writeFileString: Effect.succeed(''),
+    });
 
     const { transformRequireStatements } = await import(
       './transform-require-statements.js'
@@ -171,7 +150,7 @@ describe('transformRequireStatements function', () => {
           pathsAliases[2],
           transpiledCjsMockData,
         ),
-        Effect.provide(TestFileSystemlayer),
+        Effect.provide(FsTestLayer),
       ),
     );
     const expectedWritePath = `./dist/${sourceFilePath}`;
