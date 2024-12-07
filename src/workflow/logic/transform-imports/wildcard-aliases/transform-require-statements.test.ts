@@ -125,7 +125,7 @@ describe('transformRequireStatements function', () => {
     expect(result).toBe(expectedWritePath);
   });
 
-  it('should transform files statements', async () => {
+  it('should not transform files statements', async () => {
     const entryPoint = './cjs/index.js';
     const sourceFilePath =
       'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
@@ -153,15 +153,8 @@ describe('transformRequireStatements function', () => {
         Effect.provide(FsTestLayer),
       ),
     );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
 
-    expect(writeFileStringMock).toHaveBeenCalledTimes(1);
-    const writePath = writeFileStringMock.mock.calls[0][0];
-    const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
-    expect(transformedData).toContain(
-      'require("./../../regex/regex.tx/index.js")',
-    );
-    expect(result).toBe(expectedWritePath);
+    expect(writeFileStringMock).toHaveBeenCalledTimes(0);
+    expect(result).toBe(undefined);
   });
 });

@@ -21,6 +21,11 @@ export const transformRequireStatements = (
 ) =>
   pipe(
     Effect.gen(function* () {
+      const isFileAlias = pathsAliases[0].endsWith('/*') === false;
+      if (isFileAlias) {
+        return;
+      }
+
       const aliasWithoutEndWildcard = pathsAliases[0].slice(0, -1);
 
       const requireMatch = fileContent.match(

@@ -9,6 +9,8 @@ import {
   transpiledCjsMockData,
   transpiledDtsMockData,
   transpiledEsmMockData,
+  transpiledEsmWithMultipleDynamicImportsMockData,
+  transpiledEsmWithMultipleSimilarImportsMockData,
 } from '@tests/mock-data';
 
 describe('transformImportStatements function', () => {
@@ -20,7 +22,7 @@ describe('transformImportStatements function', () => {
     vi.clearAllMocks();
   });
 
-  it('should do nothing is no import statements are found', async () => {
+  it('should do nothing if no import statements are found', async () => {
     const entryPoint = './cjs/index.js';
     const sourceFilePath =
       'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
@@ -127,44 +129,6 @@ describe('transformImportStatements function', () => {
     expect(result).toBe(expectedWritePath);
   });
 
-  it('should transform files statements', async () => {
-    const entryPoint = './esm/index.js';
-    const sourceFilePath =
-      'esm/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
-
-    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
-      writeFileString: Effect.succeed(''),
-    });
-
-    const { transformImportStatements } = await import(
-      './transform-import-statements.js'
-    );
-
-    const result = await runPromise(
-      pipe(
-        transformImportStatements(
-          {
-            distPath,
-            rootDir,
-            entryPoint,
-            sourceFilePath,
-          },
-          pathsAliases[2],
-          transpiledEsmMockData,
-        ),
-        Effect.provide(FsTestLayer),
-      ),
-    );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
-
-    expect(writeFileStringMock).toHaveBeenCalledTimes(1);
-    const writePath = writeFileStringMock.mock.calls[0][0];
-    const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
-    expect(transformedData).toContain('./../../regex/regex.tx/index.js');
-    expect(result).toBe(expectedWritePath);
-  });
-
   it('should transform dynamic statements', async () => {
     const entryPoint = './esm/index.js';
     const sourceFilePath =
@@ -203,5 +167,129 @@ describe('transformImportStatements function', () => {
       'import("./../../../../dependencies/fs/index.js")',
     );
     expect(result).toBe(expectedWritePath);
+  });
+
+  it('should transform multiple wildcard statements', async () => {
+    const entryPoint = './esm/index.js';
+    const sourceFilePath =
+      'esm/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
+
+    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+      writeFileString: Effect.succeed(''),
+    });
+
+    const { transformImportStatements } = await import(
+      './transform-import-statements.js'
+    );
+
+    const result = await runPromise(
+      pipe(
+        transformImportStatements(
+          {
+            distPath,
+            rootDir,
+            entryPoint,
+            sourceFilePath,
+          },
+          pathsAliases[0],
+          transpiledEsmWithMultipleSimilarImportsMockData,
+        ),
+        Effect.provide(FsTestLayer),
+      ),
+    );
+    const expectedWritePath = `./dist/${sourceFilePath}`;
+
+    expect(writeFileStringMock).toHaveBeenCalledTimes(1);
+    const writePath = writeFileStringMock.mock.calls[0][0];
+    const transformedData = writeFileStringMock.mock.calls[0][1];
+    expect(writePath).toBe(expectedWritePath);
+    expect(transformedData).toContain(
+      "import { writeFileEffect } from './../../../../dependencies/fs/index.js';",
+    );
+    expect(transformedData).toContain(
+      "import { writeFileEffect } from './../../../../dependencies/http/index.js';",
+    );
+    expect(transformedData).toContain(
+      "import { writeFileEffect } from './../../../../dependencies/yolo/cool/bro/index.js';",
+    );
+    expect(result).toBe(expectedWritePath);
+  });
+
+  it('should transform multiple dynamic statements', async () => {
+    const entryPoint = './esm/index.js';
+    const sourceFilePath =
+      'esm/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
+
+    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+      writeFileString: Effect.succeed(''),
+    });
+
+    const { transformImportStatements } = await import(
+      './transform-import-statements.js'
+    );
+
+    const result = await runPromise(
+      pipe(
+        transformImportStatements(
+          {
+            distPath,
+            rootDir,
+            entryPoint,
+            sourceFilePath,
+          },
+          pathsAliases[0],
+          transpiledEsmWithMultipleDynamicImportsMockData,
+        ),
+        Effect.provide(FsTestLayer),
+      ),
+    );
+    const expectedWritePath = `./dist/${sourceFilePath}`;
+
+    expect(writeFileStringMock).toHaveBeenCalledTimes(1);
+    const writePath = writeFileStringMock.mock.calls[0][0];
+    const transformedData = writeFileStringMock.mock.calls[0][1];
+    expect(writePath).toBe(expectedWritePath);
+    expect(transformedData).toContain('./../../../../dependencies/fs/index.js');
+    expect(transformedData).toContain(
+      './../../../../dependencies/http/index.js',
+    );
+    expect(transformedData).toContain(
+      './../../../../dependencies/yolo/bro/index.js',
+    );
+
+    expect(result).toBe(expectedWritePath);
+  });
+
+  it('should not transform files statements', async () => {
+    const entryPoint = './cjs/index.js';
+    const sourceFilePath =
+      'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
+
+    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+      writeFileString: Effect.succeed(''),
+    });
+
+    const { transformImportStatements } = await import(
+      './transform-import-statements.js'
+    );
+
+    const result = await runPromise(
+      pipe(
+        transformImportStatements(
+          {
+            distPath,
+            rootDir,
+            entryPoint,
+            sourceFilePath,
+          },
+          pathsAliases[2],
+          transpiledEsmMockData,
+        ),
+        Effect.provide(FsTestLayer),
+      ),
+    );
+
+    expect(writeFileStringMock).toHaveBeenCalledTimes(0);
+    expect(result).toBe(undefined);
   });
 });

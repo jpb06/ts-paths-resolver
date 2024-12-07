@@ -48,7 +48,7 @@ describe('transformImportStatements function', () => {
   });
 
   describe('cjs', () => {
-    it('should raise a fsError if file write fails', async () => {
+    it('should raise an error if file write fails', async () => {
       const sourceFilePath =
         'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
 

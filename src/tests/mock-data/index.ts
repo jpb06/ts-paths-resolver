@@ -6,3 +6,6 @@ export * from './paths-aliases.mock-data.js';
 export * from './transpiled-cjs.mock-data.js';
 export * from './transpiled-dts.mock-data.js';
 export * from './transpiled-esm.mock-data.js';
+export * from './transpiled-esm-with-multiple-similar-imports.mock-data.js';
+export * from './transpiled-esm-with-multiple-dynamic-imports.mock-data.js';
+export * from './transpiled-cjs-with-multiple-similar-imports.mock-data.js';
