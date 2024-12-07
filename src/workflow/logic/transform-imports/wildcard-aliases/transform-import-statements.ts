@@ -1,13 +1,12 @@
-import { FileSystem } from '@effect/platform/FileSystem';
 import { Effect, pipe } from 'effect';
 
 import { dynamicImportPathRegex, importPathRegex } from '@regex';
 
-import { resolveFullPath } from '../../resolve-path/resolve-full-path.js';
 import type {
   PathsAliasesEntries,
   TransformPathAliasesInFileArgs,
 } from '../types.js';
+import { replaceImports } from './replace-imports.js';
 
 export const transformImportStatements = (
   {
@@ -21,55 +20,41 @@ export const transformImportStatements = (
 ) =>
   pipe(
     Effect.gen(function* () {
-      const fs = yield* FileSystem;
-      let updatedFileContent = fileContent;
+      const isFileAlias = pathsAliases[0].endsWith('/*') === false;
+      if (isFileAlias) {
+        return;
+      }
+
       const writePath = `${distPath}/${sourceFilePath}`;
 
       const aliasWithoutEndWildcard = pathsAliases[0].slice(0, -1);
       const targetWithoutEndWildcard = pathsAliases[1][0].slice(0, -1);
 
-      const importMatch = fileContent.match(
-        importPathRegex(aliasWithoutEndWildcard),
+      const importsReplaced = yield* replaceImports(
+        rootDir,
+        entryPoint,
+        sourceFilePath,
+        targetWithoutEndWildcard,
+        fileContent,
+        writePath,
+        new RegExp(importPathRegex(aliasWithoutEndWildcard), 'g'),
       );
-      if (importMatch) {
-        const fullPath = importMatch[1];
-        const subPath = importMatch[2];
-
-        const resolvedPath = resolveFullPath(
-          rootDir,
-          entryPoint,
-          `./${sourceFilePath}`,
-          `${targetWithoutEndWildcard}${subPath}`,
-        );
-
-        updatedFileContent = fileContent.replace(fullPath, resolvedPath);
-        yield* fs.writeFileString(writePath, updatedFileContent);
-      }
-
-      const dynamicImportMatch = fileContent.match(
-        dynamicImportPathRegex(aliasWithoutEndWildcard),
+      const dynamicImportsReplaced = yield* replaceImports(
+        rootDir,
+        entryPoint,
+        sourceFilePath,
+        targetWithoutEndWildcard,
+        fileContent,
+        writePath,
+        new RegExp(dynamicImportPathRegex(aliasWithoutEndWildcard), 'g'),
       );
-      if (dynamicImportMatch) {
-        const fullPath = dynamicImportMatch[1];
-        const subPath = dynamicImportMatch[2];
 
-        const resolvedPath = resolveFullPath(
-          rootDir,
-          entryPoint,
-          `./${sourceFilePath}`,
-          `${targetWithoutEndWildcard}${subPath}`,
-        );
-
-        updatedFileContent = fileContent.replace(fullPath, resolvedPath);
-        yield* fs.writeFileString(writePath, updatedFileContent);
+      const match = importsReplaced || dynamicImportsReplaced;
+      if (match) {
+        return writePath;
       }
 
-      const noMatch = importMatch === null && dynamicImportMatch === null;
-      if (noMatch) {
-        return undefined;
-      }
-
-      return writePath;
+      return undefined;
     }),
     Effect.withSpan('transform-import-statements', {
       attributes: {
