@@ -51,9 +51,9 @@
     "sync-icons": "bun generateReadmeIcons -h 50"
   },
   "dependencies": {
-    "@effect/platform": "^0.71.0",
+    "@effect/platform": "^0.71.2",
     "comment-json": "^4.2.5",
-    "effect": "^3.11.5",
+    "effect": "^3.11.7",
     "glob": "^11.0.0",
     "picocolors": "^1.1.1",
     "yargs": "^17.7.2"
@@ -68,7 +68,7 @@
     "@vitest/coverage-v8": "^2.1.8",
     "copyfiles": "^2.4.1",
     "del-cli": "^6.0.0",
-    "effect-errors": "^1.7.41",
+    "effect-errors": "^1.7.44",
     "readme-package-icons": "^1.1.16",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.8",
