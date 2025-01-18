@@ -54,7 +54,7 @@
     "@effect/platform": "0.74.0",
     "comment-json": "4.2.5",
     "effect": "3.12.5",
-    "glob": "11.0.0",
+    "glob": "11.0.1",
     "picocolors": "1.1.1",
     "yargs": "17.7.2"
   },
