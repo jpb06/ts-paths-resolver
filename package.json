@@ -17,12 +17,12 @@
   "exports": {
     ".": {
       "require": {
-        "default": "./cjs/index.js",
-        "types": "./dts/index.d.ts"
+        "types": "./dts/index.d.ts",
+        "default": "./cjs/index.js"
       },
       "import": {
-        "default": "./esm/index.js",
-        "types": "./dts/index.d.ts"
+        "types": "./dts/index.d.ts",
+        "default": "./esm/index.js"
       }
     }
   },
@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@effect/platform": "0.75.1",
+    "@effect/platform-node": "^0.71.1",
     "comment-json": "4.2.5",
     "effect": "3.12.7",
     "glob": "11.0.1",
