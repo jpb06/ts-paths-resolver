@@ -71,7 +71,7 @@
     "copyfiles": "2.4.1",
     "del-cli": "6.0.0",
     "npm-check-updates": "17.1.14",
-    "readme-package-icons": "1.1.16",
+    "readme-package-icons": "1.2.0",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.0.4",
     "vitest-mock-extended": "2.0.2"
