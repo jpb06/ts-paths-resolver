@@ -51,11 +51,11 @@
     "sync-icons": "bun generateReadmeIcons -h 50"
   },
   "dependencies": {
-    "@effect/platform": "0.75.1",
-    "@effect/platform-node": "0.71.1",
+    "@effect/platform": "0.75.3",
+    "@effect/platform-node": "0.71.3",
     "comment-json": "4.2.5",
-    "effect": "3.12.7",
-    "effect-errors": "1.8.24",
+    "effect": "3.12.9",
+    "effect-errors": "1.8.29",
     "glob": "11.0.1",
     "picocolors": "1.1.1",
     "yargs": "17.7.2"
