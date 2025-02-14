@@ -54,7 +54,7 @@
     "@effect/platform": "0.75.3",
     "@effect/platform-node": "0.71.3",
     "comment-json": "4.2.5",
-    "effect": "3.12.9",
+    "effect": "3.13.1",
     "effect-errors": "1.8.29",
     "glob": "11.0.1",
     "picocolors": "1.1.1",
