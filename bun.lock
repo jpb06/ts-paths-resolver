@@ -8,7 +8,7 @@
         "@effect/platform-node": "0.73.4",
         "comment-json": "4.2.5",
         "effect": "3.13.4",
-        "effect-errors": "1.8.38",
+        "effect-errors": "1.8.39",
         "glob": "11.0.1",
         "picocolors": "1.1.1",
         "yargs": "17.7.2",
@@ -292,7 +292,7 @@
 
     "effect": ["effect@3.13.4", "", { "dependencies": { "@standard-schema/spec": "^1.0.0", "fast-check": "^3.23.1" } }, "sha512-XZgCImyBpONuKdsBRk37JfV7242yxTu8r/TcL5ZELIyqRbMYa+Prr86cz1INxXi7iFXfU0havZkCJGyYp1BsiA=="],
 
-    "effect-errors": ["effect-errors@1.8.38", "", { "dependencies": { "@effect/platform": "0.77.4", "@effect/platform-node": "0.73.4", "@effect/schema": "0.75.5", "comment-json": "4.2.5", "effect": "3.13.4", "picocolors": "1.1.1", "source-map-js": "1.2.1" } }, "sha512-ULzbEuHi8rBQAjm+oyD08MVEKU7QzDLiGVacWIr830AdEOuKjm4POkP09BtKN6QDzH3E7hG23pNgeYmna9IyfA=="],
+    "effect-errors": ["effect-errors@1.8.39", "", { "dependencies": { "@effect/platform": "0.77.4", "@effect/platform-node": "0.73.4", "@effect/schema": "0.75.5", "comment-json": "4.2.5", "effect": "3.13.4", "picocolors": "1.1.1", "source-map-js": "1.2.1" } }, "sha512-E7vLXO+aBuWWECozRNr5tLNG0KXQ9QU3OQzIWvIO8NOqbQgWv5d8SImnuNAhmlTLxFkycKiMJNqoesIAHKt4/w=="],
 
     "emoji-regex": ["emoji-regex@8.0.0", "", {}, "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="],
 
