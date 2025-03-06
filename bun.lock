@@ -7,7 +7,7 @@
         "@effect/platform": "0.77.6",
         "@effect/platform-node": "0.73.6",
         "comment-json": "4.2.5",
-        "effect": "3.13.4",
+        "effect": "3.13.7",
         "effect-errors": "1.8.39",
         "glob": "11.0.1",
         "picocolors": "1.1.1",
@@ -290,7 +290,7 @@
 
     "eastasianwidth": ["eastasianwidth@0.2.0", "", {}, "sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA=="],
 
-    "effect": ["effect@3.13.4", "", { "dependencies": { "@standard-schema/spec": "^1.0.0", "fast-check": "^3.23.1" } }, "sha512-XZgCImyBpONuKdsBRk37JfV7242yxTu8r/TcL5ZELIyqRbMYa+Prr86cz1INxXi7iFXfU0havZkCJGyYp1BsiA=="],
+    "effect": ["effect@3.13.7", "", { "dependencies": { "@standard-schema/spec": "^1.0.0", "fast-check": "^3.23.1" } }, "sha512-yjDuWX5M34kB38Pwilv8QU956nA2m1a6ws0i+04VQkQJEBPI4GfVhUhtNNFRaqKIOlkqdqzJHCDOwARmaf2XzA=="],
 
     "effect-errors": ["effect-errors@1.8.39", "", { "dependencies": { "@effect/platform": "0.77.4", "@effect/platform-node": "0.73.4", "@effect/schema": "0.75.5", "comment-json": "4.2.5", "effect": "3.13.4", "picocolors": "1.1.1", "source-map-js": "1.2.1" } }, "sha512-E7vLXO+aBuWWECozRNr5tLNG0KXQ9QU3OQzIWvIO8NOqbQgWv5d8SImnuNAhmlTLxFkycKiMJNqoesIAHKt4/w=="],
 
@@ -559,6 +559,8 @@
     "effect-errors/@effect/platform": ["@effect/platform@0.77.4", "", { "dependencies": { "find-my-way-ts": "^0.1.5", "multipasta": "^0.2.5" }, "peerDependencies": { "effect": "^3.13.4" } }, "sha512-3jBDn4bAWqRSKARmoMY2NmMxIMM5Py5BqJdUuYJqPyI6jbz7qkOMwgeaF62rWqiqhQLHLTgU4QL/cPwyZl7mVg=="],
 
     "effect-errors/@effect/platform-node": ["@effect/platform-node@0.73.4", "", { "dependencies": { "@effect/platform-node-shared": "^0.27.4", "mime": "^3.0.0", "undici": "^7.1.0", "ws": "^8.18.0" }, "peerDependencies": { "@effect/platform": "^0.77.4", "effect": "^3.13.4" } }, "sha512-mIsOxD3mmbwDjSrsRbxYYCzmSztQSRk4Bu/wej2E3c3pKQq5nwBtob8+H+idC1ugtTyuzJs7lJGSSuACiDjTnA=="],
+
+    "effect-errors/effect": ["effect@3.13.4", "", { "dependencies": { "@standard-schema/spec": "^1.0.0", "fast-check": "^3.23.1" } }, "sha512-XZgCImyBpONuKdsBRk37JfV7242yxTu8r/TcL5ZELIyqRbMYa+Prr86cz1INxXi7iFXfU0havZkCJGyYp1BsiA=="],
 
     "glob/minimatch": ["minimatch@10.0.1", "", { "dependencies": { "brace-expansion": "^2.0.1" } }, "sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ=="],
 
