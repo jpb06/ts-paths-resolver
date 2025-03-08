@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.36](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.35...v1.2.36) (2025-03-08)
+
+
+### Bug Fixes
+
+* move effect to peer dependencies ([#74](https://github.com/jpb06/ts-paths-resolver/issues/74)) ([d8a0a42](https://github.com/jpb06/ts-paths-resolver/commit/d8a0a42139a6c22f7994ab75d028dcd9c701ab8f))
+
 ## [1.2.35](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.34...v1.2.35) (2025-03-08)
 
 
