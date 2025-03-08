@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@effect/platform": "0.77.6",
-    "@effect/platform-node": "0.73.6",
+    "@effect/platform-node": "0.74.0",
     "comment-json": "4.2.5",
     "effect": "3.13.4",
     "effect-errors": "1.8.39",
