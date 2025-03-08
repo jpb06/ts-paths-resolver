@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.35](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.34...v1.2.35) (2025-03-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @effect/platform to v0.77.6 ([#49](https://github.com/jpb06/ts-paths-resolver/issues/49)) ([e9e444f](https://github.com/jpb06/ts-paths-resolver/commit/e9e444f96539eb75c45c312ec8d480d7b4aac520))
+* **deps:** update dependency @effect/platform to v0.78.0 ([#72](https://github.com/jpb06/ts-paths-resolver/issues/72)) ([5029d99](https://github.com/jpb06/ts-paths-resolver/commit/5029d991ec454392af3724e7140cd25459e0f6ac))
+* **deps:** update dependency @effect/platform-node to v0.73.6 ([#50](https://github.com/jpb06/ts-paths-resolver/issues/50)) ([bda2393](https://github.com/jpb06/ts-paths-resolver/commit/bda2393bc77c9a52c7a9093bd4ef2a08d704e447))
+* **deps:** update dependency @effect/platform-node to v0.74.0 ([#73](https://github.com/jpb06/ts-paths-resolver/issues/73)) ([90ba99e](https://github.com/jpb06/ts-paths-resolver/commit/90ba99e962c2ed750c7f2e8af30a7714f17df880))
+* **deps:** update dependency effect to v3.13.7 ([#69](https://github.com/jpb06/ts-paths-resolver/issues/69)) ([30634d7](https://github.com/jpb06/ts-paths-resolver/commit/30634d7511350a67f305b573076b45fdef281977))
+* **deps:** update dependency effect-errors to v1.8.39 ([#67](https://github.com/jpb06/ts-paths-resolver/issues/67)) ([8421e3b](https://github.com/jpb06/ts-paths-resolver/commit/8421e3b2897bea08d167d15b905a58c9eec0979e))
+
 ## [1.2.34](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.33...v1.2.34) (2025-03-01)
 
 
