@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.46](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.45...v1.2.46) (2025-04-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @effect/platform to v0.80.5 ([#114](https://github.com/jpb06/ts-paths-resolver/issues/114)) ([0722957](https://github.com/jpb06/ts-paths-resolver/commit/07229577829ca62420dc27bc2ed145c6eb12ef7e))
+* **deps:** update dependency @effect/platform-node to v0.76.9 ([#115](https://github.com/jpb06/ts-paths-resolver/issues/115)) ([c89f926](https://github.com/jpb06/ts-paths-resolver/commit/c89f926c705d405b4d83f8d68327bf5214d95e12))
+* **deps:** update dependency effect to v3.14.5 ([#113](https://github.com/jpb06/ts-paths-resolver/issues/113)) ([680b1a1](https://github.com/jpb06/ts-paths-resolver/commit/680b1a1bd9ce069d84820432f3e68efef1b268bd))
+* **deps:** update dependency effect-errors to v1.8.51 ([#116](https://github.com/jpb06/ts-paths-resolver/issues/116)) ([b9b4ee2](https://github.com/jpb06/ts-paths-resolver/commit/b9b4ee2ecd4763277471e74ba958c2ea9afd2c8c))
+
 ## [1.2.45](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.44...v1.2.45) (2025-04-01)
 
 
