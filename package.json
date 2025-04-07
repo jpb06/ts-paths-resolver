@@ -74,6 +74,6 @@
     "readme-package-icons": "1.2.0",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.1.1",
-    "vitest-mock-extended": "3.0.1"
+    "vitest-mock-extended": "3.1.0"
   }
 }
