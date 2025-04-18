@@ -5,7 +5,7 @@
       "name": "ts-paths-resolver",
       "dependencies": {
         "@effect/platform": "0.80.10",
-        "@effect/platform-node": "0.76.20",
+        "@effect/platform-node": "0.76.21",
         "comment-json": "4.2.5",
         "effect-errors": "1.9.2",
         "glob": "11.0.1",
@@ -68,9 +68,9 @@
 
     "@effect/platform": ["@effect/platform@0.80.10", "", { "dependencies": { "find-my-way-ts": "^0.1.5", "msgpackr": "^1.11.2", "multipasta": "^0.2.5" }, "peerDependencies": { "effect": "^3.14.10" } }, "sha512-G3IB15h3QCUPzQmLbSXfrwOrdBZCfzGb24lAx2HsOs1mn6Q120UgT21ZerN0RR6S//R67flDxiBgSGK5wrpAbw=="],
 
-    "@effect/platform-node": ["@effect/platform-node@0.76.20", "", { "dependencies": { "@effect/platform-node-shared": "^0.30.20", "mime": "^3.0.0", "undici": "^7.1.0", "ws": "^8.18.0" }, "peerDependencies": { "@effect/cluster": "^0.29.20", "@effect/platform": "^0.80.10", "@effect/rpc": "^0.55.15", "@effect/sql": "^0.33.10", "effect": "^3.14.10" } }, "sha512-VoFCXC8F0lZVCkZNiwTY/E0y1/GTq2aVYm1USlPlbhbAT1EphtshhBGVjwuDkckK0TJJEVQO66duCi5hcKyeVg=="],
+    "@effect/platform-node": ["@effect/platform-node@0.76.21", "", { "dependencies": { "@effect/platform-node-shared": "^0.30.21", "mime": "^3.0.0", "undici": "^7.1.0", "ws": "^8.18.0" }, "peerDependencies": { "@effect/cluster": "^0.29.21", "@effect/platform": "^0.80.11", "@effect/rpc": "^0.55.16", "@effect/sql": "^0.33.11", "effect": "^3.14.11" } }, "sha512-sGX+b5Lkj9dGi7VWhPVKLNX8CyzDHuiDv5Z53TtMEtiVnd6s/dmcYBGFdOt6a5xDdeO23Ikm1qhxJBF+LxVdXw=="],
 
-    "@effect/platform-node-shared": ["@effect/platform-node-shared@0.30.20", "", { "dependencies": { "@parcel/watcher": "^2.4.1", "multipasta": "^0.2.5", "ws": "^8.18.0" }, "peerDependencies": { "@effect/cluster": "^0.29.20", "@effect/platform": "^0.80.10", "@effect/rpc": "^0.55.15", "@effect/sql": "^0.33.10", "effect": "^3.14.10" } }, "sha512-h5wh/suIsHGCYwI+p6wPACpZIuzMV8O/Sd0lzezINNz0a99T5cWFqR3Y3+CWedN6cxSGinGh2Ke8ThXNgPONPA=="],
+    "@effect/platform-node-shared": ["@effect/platform-node-shared@0.30.21", "", { "dependencies": { "@parcel/watcher": "^2.4.1", "multipasta": "^0.2.5", "ws": "^8.18.0" }, "peerDependencies": { "@effect/cluster": "^0.29.21", "@effect/platform": "^0.80.11", "@effect/rpc": "^0.55.16", "@effect/sql": "^0.33.11", "effect": "^3.14.11" } }, "sha512-pCXquwHS8+90qyeOvgQrRcGsdmP0F/WzV95r++WzOcywyx2QrYQzYMxEZV3fzGiuHM6/f8rjD40hlQt224V4iA=="],
 
     "@effect/rpc": ["@effect/rpc@0.55.0", "", { "peerDependencies": { "@effect/platform": "^0.80.0", "effect": "^3.14.0" } }, "sha512-rsg561/X9GckYpIkYncoT31E2MSgJrWn5EueUZxnoINpo5heL5yKKWp6rZ4VmVmN1xOVnoRi/8Cl9uVeeXgs9w=="],
 
