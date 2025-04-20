@@ -1,6 +1,6 @@
 {
   "name": "ts-paths-resolver",
-  "version": "1.2.53",
+  "version": "1.2.54",
   "author": "jpb06 <jp.bois.06@outlook.fr>",
   "description": "Yet another paths resolver for typescript paths aliases",
   "keywords": [
