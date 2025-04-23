@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.56](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.55...v1.2.56) (2025-04-23)
+
+
+### Bug Fixes
+
+* move effect packages to peer deps ([#159](https://github.com/jpb06/ts-paths-resolver/issues/159)) ([fcf8e58](https://github.com/jpb06/ts-paths-resolver/commit/fcf8e5832b5b6a66e47137e83b51ecba33ccc535))
+
 ## [1.2.55](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.54...v1.2.55) (2025-04-23)
 
 
