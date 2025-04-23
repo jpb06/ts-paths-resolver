@@ -53,7 +53,7 @@
   "dependencies": {
     "comment-json": "4.2.5",
     "effect-errors": "1.10.2",
-    "glob": "11.0.1",
+    "glob": "11.0.2",
     "picocolors": "1.1.1",
     "yargs": "17.7.2"
   },
