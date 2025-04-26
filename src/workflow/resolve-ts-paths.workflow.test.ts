@@ -29,6 +29,8 @@ describe('resolveTsPaths function', () => {
   const tsPaths: string[] = [];
 
   beforeAll(async () => {
+    vi.mocked(displaySuccess).mockImplementation(() => Effect.void);
+
     const tsconfigData = await readFile('./tsconfig.json', {
       encoding: 'utf-8',
     });

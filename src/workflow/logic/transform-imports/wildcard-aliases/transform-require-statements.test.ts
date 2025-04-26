@@ -7,6 +7,7 @@ import { makeFsTestLayer } from '@tests/layers';
 import {
   pathsAliasesMockData,
   transpiledCjsMockData,
+  transpiledCjsWithMultipleSimilarImportsMockData,
   transpiledEsmMockData,
 } from '@tests/mock-data';
 
@@ -121,6 +122,53 @@ describe('transformRequireStatements function', () => {
     expect(writePath).toBe(expectedWritePath);
     expect(transformedData).toContain(
       'require("./../../../../dependencies/fs/index.js")',
+    );
+    expect(result).toBe(expectedWritePath);
+  });
+
+  it('should transform several occurences of the same wildcard statement entry', async () => {
+    const entryPoint = './cjs/index.js';
+    const sourceFilePath =
+      'cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js';
+
+    const { FsTestLayer, writeFileStringMock } = makeFsTestLayer({
+      writeFileString: Effect.succeed(''),
+    });
+
+    const { transformRequireStatements } = await import(
+      './transform-require-statements.js'
+    );
+
+    const result = await runPromise(
+      pipe(
+        transformRequireStatements(
+          {
+            distPath,
+            rootDir,
+            entryPoint,
+            sourceFilePath,
+          },
+          pathsAliases[0],
+          transpiledCjsWithMultipleSimilarImportsMockData,
+        ),
+        Effect.provide(FsTestLayer),
+      ),
+    );
+    const expectedWritePath = `./dist/${sourceFilePath}`;
+
+    expect(writeFileStringMock).toHaveBeenCalledTimes(1);
+    const writePath = writeFileStringMock.mock.calls[0][0];
+    const transformedData = writeFileStringMock.mock.calls[0][1];
+    expect(writePath).toBe(expectedWritePath);
+
+    expect(transformedData).toContain(
+      'require("./../../../../dependencies/fs/index.js")',
+    );
+    expect(transformedData).toContain(
+      'require("./../../../../dependencies/http/index.js")',
+    );
+    expect(transformedData).toContain(
+      'require("./../../../../dependencies/yolo/bro/index.js")',
     );
     expect(result).toBe(expectedWritePath);
   });
