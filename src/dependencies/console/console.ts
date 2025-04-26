@@ -20,10 +20,3 @@ export const displaySuccess = (resolvedCount: number) =>
       )} (${summary})`,
     );
   });
-
-export const displayError = (err: unknown) =>
-  Console.error(
-    `${colors.cyanBright(packageName)} ❌ - ${colors.redBright(
-      (err as { stack: string }).stack,
-    )}`,
-  );
