@@ -35,7 +35,7 @@ export const resolveTsPathsEffect = ({
         filesByEntryPoint,
       );
 
-      displaySuccess(alteredFiles.length);
+      yield* displaySuccess(alteredFiles.length);
     }),
     Effect.withSpan('resolve-ts-paths'),
   );

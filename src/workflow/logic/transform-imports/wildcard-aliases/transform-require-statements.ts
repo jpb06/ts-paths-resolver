@@ -27,30 +27,37 @@ export const transformRequireStatements = (
       }
 
       const aliasWithoutEndWildcard = pathsAliases[0].slice(0, -1);
-
-      const requireMatch = fileContent.match(
-        requirePathRegex(aliasWithoutEndWildcard),
-      );
-      if (!requireMatch) {
+      const requireMatches = [
+        ...fileContent.matchAll(
+          new RegExp(requirePathRegex(aliasWithoutEndWildcard), 'g'),
+        ),
+      ];
+      if (requireMatches.length === 0) {
         return undefined;
       }
 
+      const fs = yield* FileSystem;
       const targetWithoutEndWildcard = pathsAliases[1][0].slice(0, -1);
-      const fullPath = requireMatch[0];
-      const subPath = requireMatch[1];
-      const resolvedPath = resolveFullPath(
-        rootDir,
-        entryPoint,
-        `./${sourceFilePath}`,
-        `${targetWithoutEndWildcard}${subPath}`,
+      const fileContentWithTransformedPaths = requireMatches.reduce(
+        (alteredFileContent, match) => {
+          const fullPath = match[0];
+          const subPath = match[1];
+          const resolvedPath = resolveFullPath(
+            rootDir,
+            entryPoint,
+            `./${sourceFilePath}`,
+            `${targetWithoutEndWildcard}${subPath}`,
+          );
+
+          return alteredFileContent.replace(
+            fullPath,
+            `require("${resolvedPath}")`,
+          );
+        },
+        fileContent,
       );
 
-      const fileContentWithTransformedPaths = fileContent.replace(
-        fullPath,
-        `require("${resolvedPath}")`,
-      );
       const writePath = `${distPath}/${sourceFilePath}`;
-      const fs = yield* FileSystem;
       yield* fs.writeFileString(writePath, fileContentWithTransformedPaths);
 
       return writePath;
