@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.58](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.57...v1.2.58) (2025-04-26)
+
+
+### Bug Fixes
+
+* cjs multiple wildcard paths occurences replacements ([#173](https://github.com/jpb06/ts-paths-resolver/issues/173)) ([96818c9](https://github.com/jpb06/ts-paths-resolver/commit/96818c98d71609870973cedc333951969dfb5f3f))
+* **deps:** update dependency effect to v3.14.14 ([#168](https://github.com/jpb06/ts-paths-resolver/issues/168)) ([57075fe](https://github.com/jpb06/ts-paths-resolver/commit/57075fec02e534a9d52a14eec5bcf611199e2258))
+* **deps:** update dependency effect-errors to v1.10.3 ([#170](https://github.com/jpb06/ts-paths-resolver/issues/170)) ([efc52c3](https://github.com/jpb06/ts-paths-resolver/commit/efc52c396cacb3b249a6668a7776f492bb4af8f1))
+* range for effect peer deps ([#172](https://github.com/jpb06/ts-paths-resolver/issues/172)) ([280adab](https://github.com/jpb06/ts-paths-resolver/commit/280adab4b740ac4bdf11689ae3763d2bee3aea7e))
+
 ## [1.2.57](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.56...v1.2.57) (2025-04-23)
 
 
