@@ -62,7 +62,7 @@
     "@effect/rpc": "0.56.x",
     "@effect/platform": "0.80.x",
     "@effect/platform-node": "0.77.x",
-    "effect": "3.14.14",
+    "effect": "3.14.16",
     "typescript": "5.8.3"
   },
   "devDependencies": {
