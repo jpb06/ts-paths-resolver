@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.63](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.62...v1.2.63) (2025-05-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency effect-errors to v1.10.11 ([#195](https://github.com/jpb06/ts-paths-resolver/issues/195)) ([7dda4f7](https://github.com/jpb06/ts-paths-resolver/commit/7dda4f794cc51a2b926afee2811961e92e15b04a))
+* effect peer deps leniency ([#194](https://github.com/jpb06/ts-paths-resolver/issues/194)) ([154068e](https://github.com/jpb06/ts-paths-resolver/commit/154068ec03cad9821cc654d595de92086030fd06))
+
 ## [1.2.62](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.61...v1.2.62) (2025-05-12)
 
 
