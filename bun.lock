@@ -27,7 +27,7 @@
         "@effect/cluster": "0.30.x || 0.31.x",
         "@effect/platform": "0.80.x || 0.81.x",
         "@effect/platform-node": "0.77.x",
-        "@effect/rpc": "0.56.x",
+        "@effect/rpc": "0.56.x || 0.59.x",
         "effect": "3.14.21",
         "typescript": "5.8.3",
       },
