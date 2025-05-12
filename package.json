@@ -51,10 +51,6 @@
     "sync-icons": "bun generateReadmeIcons -h 50"
   },
   "dependencies": {
-    "@effect/cluster": "0.33.0",
-    "@effect/platform": "0.82.0",
-    "@effect/platform-node": "0.80.0",
-    "@effect/rpc": "0.59.0",
     "comment-json": "4.2.5",
     "effect-errors": "1.10.10",
     "glob": "11.0.2",
@@ -62,7 +58,11 @@
     "yargs": "17.7.2"
   },
   "peerDependencies": {
-    "effect": "3.15.0",
+    "@effect/cluster": "0.x",
+    "@effect/platform": "0.x",
+    "@effect/platform-node": "0.x",
+    "@effect/rpc": "0.x",
+    "effect": "3.x",
     "typescript": "5.8.3"
   },
   "devDependencies": {
