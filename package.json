@@ -55,7 +55,7 @@
     "effect-errors": "1.10.11",
     "glob": "11.0.2",
     "picocolors": "1.1.1",
-    "yargs": "17.7.2"
+    "yargs": "18.0.0"
   },
   "peerDependencies": {
     "@effect/cluster": "0.x",
