@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.64](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.63...v1.2.64) (2025-05-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs to v18 ([#199](https://github.com/jpb06/ts-paths-resolver/issues/199)) ([b1bd834](https://github.com/jpb06/ts-paths-resolver/commit/b1bd83408f248f2aa6b771d980e0fe6208bdd700))
+
 ## [1.2.63](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.62...v1.2.63) (2025-05-12)
 
 
