@@ -1,6 +1,7 @@
 import { exec } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import util from 'node:util';
+
 import { NodeFileSystem } from '@effect/platform-node';
 import { parse } from 'comment-json';
 import { Effect, pipe } from 'effect';
@@ -34,7 +35,7 @@ describe('resolveTsPaths function', () => {
     const tsconfigData = await readFile('./tsconfig.json', {
       encoding: 'utf-8',
     });
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: test
     const tsconfig = parse(tsconfigData) as any;
     tsPaths.push(
       ...Object.keys(tsconfig.compilerOptions.paths).map((alias) =>
@@ -67,7 +68,7 @@ describe('resolveTsPaths function', () => {
     expect(displaySuccess).toHaveBeenCalledWith(0);
   });
 
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: test
   it('should translate import and require statements', async () => {
     await execPromise(
       'cp -R ./src/tests/mock-data/frozen-dist ./src/tests/mock-data/dist',
