@@ -70,7 +70,6 @@ export const transformFileAliases = (
         ...(importMatch ?? []),
         ...(dynamicImportMatch ?? []),
       ];
-      resolvedPath;
 
       fileResolutions.resolutions = allMatches.map(() => ({
         alias: pathsAliases[0],
