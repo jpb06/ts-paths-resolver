@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.68...v1.3.0) (2025-08-03)
+
+
+### Features
+
+* simplify required inputs and add debug option ([#223](https://github.com/jpb06/ts-paths-resolver/issues/223)) ([3f554eb](https://github.com/jpb06/ts-paths-resolver/commit/3f554eb859a560d7754e1fa8e20620d22e7dd034))
+
 ## [1.2.68](https://github.com/jpb06/ts-paths-resolver/compare/v1.2.67...v1.2.68) (2025-07-05)
 
 
