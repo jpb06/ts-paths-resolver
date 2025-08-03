@@ -52,6 +52,10 @@ Examples:
   resolve-ts-paths --path ./dist --tsconfigPath ./tsconfig.json --debug true
 ```
 
+If `debug` option is set to true, the resolutions will be displayed; for example:
+
+![debug](./docs/debug.png)
+
 ### 🧿 cjs
 
 ```bash
