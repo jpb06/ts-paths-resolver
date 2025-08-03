@@ -50,7 +50,7 @@ describe('transformRequireStatements function', () => {
     );
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(0);
-    expect(result).toBeUndefined();
+    expect(result).toStrictEqual([]);
   });
 
   it('should raise a fsError if file write fails', async () => {
@@ -114,16 +114,20 @@ describe('transformRequireStatements function', () => {
         Effect.provide(FsTestLayer),
       ),
     );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(1);
     const writePath = writeFileStringMock.mock.calls[0][0];
     const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
+    expect(writePath).toBe(`./dist/${sourceFilePath}`);
     expect(transformedData).toContain(
       'require("./../../../../dependencies/fs/index.js")',
     );
-    expect(result).toBe(expectedWritePath);
+    expect(result).toStrictEqual([
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/fs/index.js',
+      },
+    ]);
   });
 
   it('should transform several occurences of the same wildcard statement entry', async () => {
@@ -154,12 +158,11 @@ describe('transformRequireStatements function', () => {
         Effect.provide(FsTestLayer),
       ),
     );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(1);
     const writePath = writeFileStringMock.mock.calls[0][0];
     const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
+    expect(writePath).toBe(`./dist/${sourceFilePath}`);
 
     expect(transformedData).toContain(
       'require("./../../../../dependencies/fs/index.js")',
@@ -170,7 +173,20 @@ describe('transformRequireStatements function', () => {
     expect(transformedData).toContain(
       'require("./../../../../dependencies/yolo/bro/index.js")',
     );
-    expect(result).toBe(expectedWritePath);
+    expect(result).toStrictEqual([
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/fs/index.js',
+      },
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/http/index.js',
+      },
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/yolo/bro/index.js',
+      },
+    ]);
   });
 
   it('should not transform files statements', async () => {
@@ -203,6 +219,6 @@ describe('transformRequireStatements function', () => {
     );
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(0);
-    expect(result).toBe(undefined);
+    expect(result).toStrictEqual([]);
   });
 });

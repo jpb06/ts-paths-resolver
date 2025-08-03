@@ -52,7 +52,7 @@ describe('transformImportStatements function', () => {
     );
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(0);
-    expect(result).toBeUndefined();
+    expect(result).toStrictEqual([]);
   });
 
   it('should raise an error if file write fails', async () => {
@@ -117,16 +117,21 @@ describe('transformImportStatements function', () => {
         Effect.provide(FsTestLayer),
       ),
     );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(1);
     const writePath = writeFileStringMock.mock.calls[0][0];
     const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
+    expect(writePath).toBe(`./dist/${sourceFilePath}`);
     expect(transformedData).toContain(
       "import { writeFileEffect } from './../../../../dependencies/fs/index.js';",
     );
-    expect(result).toBe(expectedWritePath);
+
+    expect(result).toStrictEqual([
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/fs/index.js',
+      },
+    ]);
   });
 
   it('should transform dynamic statements', async () => {
@@ -157,16 +162,21 @@ describe('transformImportStatements function', () => {
         Effect.provide(FsTestLayer),
       ),
     );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(1);
     const writePath = writeFileStringMock.mock.calls[0][0];
     const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
+    expect(writePath).toBe(`./dist/${sourceFilePath}`);
     expect(transformedData).toContain(
       'import("./../../../../dependencies/fs/index.js")',
     );
-    expect(result).toBe(expectedWritePath);
+
+    expect(result).toStrictEqual([
+      {
+        alias: '@dependencies/* (dynamic import)',
+        resolvedPath: './../../../../dependencies/fs/index.js',
+      },
+    ]);
   });
 
   it('should transform multiple wildcard statements', async () => {
@@ -197,12 +207,11 @@ describe('transformImportStatements function', () => {
         Effect.provide(FsTestLayer),
       ),
     );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(1);
     const writePath = writeFileStringMock.mock.calls[0][0];
     const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
+    expect(writePath).toBe(`./dist/${sourceFilePath}`);
     expect(transformedData).toContain(
       "import { writeFileEffect } from './../../../../dependencies/fs/index.js';",
     );
@@ -212,7 +221,35 @@ describe('transformImportStatements function', () => {
     expect(transformedData).toContain(
       "import { writeFileEffect } from './../../../../dependencies/yolo/cool/bro/index.js';",
     );
-    expect(result).toBe(expectedWritePath);
+
+    expect(result).toStrictEqual([
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/fs/index.js',
+      },
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/http/index.js',
+      },
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/yolo/cool/bro/index.js',
+      },
+    ]);
+    expect(result).toStrictEqual([
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/fs/index.js',
+      },
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/http/index.js',
+      },
+      {
+        alias: '@dependencies/*',
+        resolvedPath: './../../../../dependencies/yolo/cool/bro/index.js',
+      },
+    ]);
   });
 
   it('should transform multiple dynamic statements', async () => {
@@ -243,12 +280,11 @@ describe('transformImportStatements function', () => {
         Effect.provide(FsTestLayer),
       ),
     );
-    const expectedWritePath = `./dist/${sourceFilePath}`;
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(1);
     const writePath = writeFileStringMock.mock.calls[0][0];
     const transformedData = writeFileStringMock.mock.calls[0][1];
-    expect(writePath).toBe(expectedWritePath);
+    expect(writePath).toBe(`./dist/${sourceFilePath}`);
     expect(transformedData).toContain('./../../../../dependencies/fs/index.js');
     expect(transformedData).toContain(
       './../../../../dependencies/http/index.js',
@@ -257,7 +293,20 @@ describe('transformImportStatements function', () => {
       './../../../../dependencies/yolo/bro/index.js',
     );
 
-    expect(result).toBe(expectedWritePath);
+    expect(result).toStrictEqual([
+      {
+        alias: '@dependencies/* (dynamic import)',
+        resolvedPath: './../../../../dependencies/fs/index.js',
+      },
+      {
+        alias: '@dependencies/* (dynamic import)',
+        resolvedPath: './../../../../dependencies/http/index.js',
+      },
+      {
+        alias: '@dependencies/* (dynamic import)',
+        resolvedPath: './../../../../dependencies/yolo/bro/index.js',
+      },
+    ]);
   });
 
   it('should not transform files statements', async () => {
@@ -290,6 +339,6 @@ describe('transformImportStatements function', () => {
     );
 
     expect(writeFileStringMock).toHaveBeenCalledTimes(0);
-    expect(result).toBe(undefined);
+    expect(result).toStrictEqual([]);
   });
 });

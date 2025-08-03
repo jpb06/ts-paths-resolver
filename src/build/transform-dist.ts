@@ -7,9 +7,9 @@ import { resolveTsPathsEffect } from '../workflow/resolve-ts-paths.workflow.js';
 await runPromise(
   pipe(
     resolveTsPathsEffect({
-      distPath: './dist',
-      packageJsonPath: './package.json',
+      path: './dist',
       tsconfigPath: './tsconfig.json',
+      debug: true,
     }),
     Effect.provide(NodeFileSystem.layer),
   ),

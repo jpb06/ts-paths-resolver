@@ -3,10 +3,8 @@ import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  pathsAliasesMockData,
-  transpiledCjsMockData,
-} from '../../../../tests/mock-data/index.js';
+import { pathsAliasesMockData, transpiledCjsMockData } from '@tests/mock-data';
+
 import { transformImportStatements } from './transform-import-statements.js';
 import { transformRequireStatements } from './transform-require-statements.js';
 
@@ -46,16 +44,19 @@ describe('transformWildcardAliases function', () => {
       ),
     );
 
-    expect(result).toStrictEqual([]);
+    expect(result).toStrictEqual({
+      filePath:
+        './dist/cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js',
+      resolutions: [],
+    });
   });
 
-  it('should ', async () => {
-    const writePath = `./dist/${sourceFilePath}`;
+  it('should return an array of resolutions', async () => {
     vi.mocked(transformRequireStatements).mockReturnValueOnce(
-      Effect.succeed(writePath),
+      Effect.succeed('1' as never),
     );
     vi.mocked(transformImportStatements).mockReturnValueOnce(
-      Effect.succeed(writePath),
+      Effect.succeed('2' as never),
     );
 
     const { transformWildcardAliases } = await import(
@@ -78,6 +79,14 @@ describe('transformWildcardAliases function', () => {
       ),
     );
 
-    expect(result).toStrictEqual([writePath]);
+    expect(result).toMatchInlineSnapshot(`
+      {
+        "filePath": "./dist/cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js",
+        "resolutions": [
+          "1",
+          "2",
+        ],
+      }
+    `);
   });
 });

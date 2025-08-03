@@ -1,7 +1,7 @@
 import { Effect, pipe } from 'effect';
 
-import { distinct } from '../../distinct.js';
 import type {
+  FileTransformResolution,
   PathsAliasesEntries,
   TransformPathAliasesInFileArgs,
 } from '../types.js';
@@ -15,17 +15,23 @@ export const transformWildcardAliases = (
 ) =>
   pipe(
     Effect.gen(function* () {
+      const fileResolutions: FileTransformResolution = {
+        filePath: `${args.distPath}/${args.sourceFilePath}`,
+        resolutions: [],
+      };
+
       const aliasInFile = fileContent.includes(pathsAliases[0].slice(0, -1));
       if (!aliasInFile) {
-        return [];
+        return fileResolutions;
       }
 
-      const alteredFiles = yield* Effect.all([
+      const resolutions = yield* Effect.all([
         transformRequireStatements(args, pathsAliases, fileContent),
         transformImportStatements(args, pathsAliases, fileContent),
       ]);
 
-      return distinct(alteredFiles);
+      fileResolutions.resolutions = resolutions.flat();
+      return fileResolutions;
     }),
     Effect.withSpan('transform-wildcard-aliases', {
       attributes: {

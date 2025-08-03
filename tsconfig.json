@@ -1,9 +1,5 @@
 {
-	"exclude": [
-		"./vite.config.mts",
-		"./src/tests/mock-data/dist",
-		"./src/tests/mock-data/frozen-dist"
-	],
+	"exclude": ["./vite.config.mts", "./test-dist"],
 	"compilerOptions": {
 		// Enable latest features
 		"lib": ["ES2023", "ES2023.Array", "DOM", "DOM.Iterable"],
@@ -47,6 +43,7 @@
 			"@inputs": ["./src/workflow/inputs/index.ts"],
 			"@regex": ["./src/workflow/logic/regex/regex.ts"],
 			"@tests/errors": ["./src/tests/errors/index.ts"],
+			"@tests/helpers": ["./src/tests/helpers/index.ts"],
 			"@tests/layers": ["./src/tests/layers/index.ts"],
 			"@tests/mocks": ["./src/tests/mocks/index.ts"],
 			"@tests/mock-data": ["./src/tests/mock-data/index.ts"]

@@ -3,6 +3,7 @@ import { Effect, pipe } from 'effect';
 import { dynamicImportPathRegex, importPathRegex } from '@regex';
 
 import type {
+  PathResolution,
   PathsAliasesEntries,
   TransformPathAliasesInFileArgs,
 } from '../types.js';
@@ -22,7 +23,7 @@ export const transformImportStatements = (
     Effect.gen(function* () {
       const isFileAlias = pathsAliases[0].endsWith('/*') === false;
       if (isFileAlias) {
-        return;
+        return [];
       }
 
       const writePath = `${distPath}/${sourceFilePath}`;
@@ -30,7 +31,7 @@ export const transformImportStatements = (
       const aliasWithoutEndWildcard = pathsAliases[0].slice(0, -1);
       const targetWithoutEndWildcard = pathsAliases[1][0].slice(0, -1);
 
-      const importsReplaced = yield* replaceImports(
+      const importsResolvedPaths = yield* replaceImports(
         rootDir,
         entryPoint,
         sourceFilePath,
@@ -39,7 +40,7 @@ export const transformImportStatements = (
         writePath,
         new RegExp(importPathRegex(aliasWithoutEndWildcard), 'g'),
       );
-      const dynamicImportsReplaced = yield* replaceImports(
+      const dynamicImportsResolvedPaths = yield* replaceImports(
         rootDir,
         entryPoint,
         sourceFilePath,
@@ -49,12 +50,18 @@ export const transformImportStatements = (
         new RegExp(dynamicImportPathRegex(aliasWithoutEndWildcard), 'g'),
       );
 
-      const match = importsReplaced || dynamicImportsReplaced;
-      if (match) {
-        return writePath;
-      }
+      const resolutions: PathResolution[] = [
+        ...importsResolvedPaths.map((path) => ({
+          alias: pathsAliases[0],
+          resolvedPath: path,
+        })),
+        ...dynamicImportsResolvedPaths.map((path) => ({
+          alias: `${pathsAliases[0]} (dynamic import)`,
+          resolvedPath: path,
+        })),
+      ];
 
-      return undefined;
+      return resolutions;
     }),
     Effect.withSpan('transform-import-statements', {
       attributes: {

@@ -31,4 +31,4 @@ export const importPathRegex = (alias: string) =>
   `import.*from '(${regexEscape(alias)}(.*))'`;
 
 export const dynamicImportPathRegex = (alias: string) =>
-  new RegExp(`import\\(["'](${regexEscape(alias)}(.*))["']\\)`);
+  new RegExp(`import\\(["'](${regexEscape(alias)}(\\S*))["']\\)`);

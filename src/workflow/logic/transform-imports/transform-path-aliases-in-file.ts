@@ -15,9 +15,9 @@ export const transformPathAliasesInFile =
       Effect.gen(function* () {
         const fs = yield* FileSystem;
 
-        const fileContent = yield* fs.readFileString(
-          `${args.distPath}/${args.sourceFilePath}`,
-        );
+        const filePath = `${args.distPath}/${args.sourceFilePath}`;
+
+        const fileContent = yield* fs.readFileString(filePath);
 
         const isWildcardPath = pathsAliases[1][0].endsWith('/*');
         if (isWildcardPath) {

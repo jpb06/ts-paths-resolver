@@ -1,18 +1,23 @@
 import { Effect, pipe } from 'effect';
 
-import type { TsConfig } from '../../inputs/index.js';
+import type { TsConfig } from '@inputs';
+
 import { distinct } from '../distinct.js';
 import type { FilesByEntryPoint } from '../get-files-by-entry-point.js';
 import { transformPathAliasesInFile } from './transform-path-aliases-in-file.js';
 
 const forEachSourceFile =
-  (distPath: string, entryPoint: string, tsConfig: TsConfig) =>
+  (
+    distPath: string,
+    entryPoint: string,
+    { rootDir, tsPathAliases }: TsConfig,
+  ) =>
   (sourceFilePath: string) =>
     Effect.forEach(
-      Object.entries(tsConfig.tsPathAliases),
+      Object.entries(tsPathAliases),
       transformPathAliasesInFile({
         distPath,
-        rootDir: tsConfig.rootDir,
+        rootDir,
         sourceFilePath,
         entryPoint,
       }),
@@ -34,7 +39,7 @@ export const transformFileDependencies = (
     Effect.forEach(filesByEntryPoint, forEachEntryPoint(distPath, tsConfig), {
       concurrency: 'unbounded',
     }),
-    Effect.map((files) => distinct(files.flat(4))),
+    Effect.map((files) => distinct(files.flat(2))),
     Effect.withSpan('transform-file-dependencies', {
       attributes: {
         distPath,

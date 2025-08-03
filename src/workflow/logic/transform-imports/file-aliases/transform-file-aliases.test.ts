@@ -44,7 +44,11 @@ describe('transformImportStatements function', () => {
       ),
     );
 
-    expect(result).toStrictEqual([]);
+    expect(result).toStrictEqual({
+      filePath:
+        './dist/cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js',
+      resolutions: [],
+    });
   });
 
   describe('cjs', () => {
@@ -109,7 +113,16 @@ describe('transformImportStatements function', () => {
       );
 
       const expectedWritePath = `./dist/${sourceFilePath}`;
-      expect(result).toStrictEqual([expectedWritePath]);
+      expect(result).toStrictEqual({
+        filePath:
+          './dist/cjs/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js',
+        resolutions: [
+          {
+            alias: '@regex',
+            resolvedPath: './../../regex/regex.js',
+          },
+        ],
+      });
       expect(writeFileStringMock).toHaveBeenCalledTimes(1);
       const writePath = writeFileStringMock.mock.calls[0][0];
       const transformedData = writeFileStringMock.mock.calls[0][1];
@@ -180,7 +193,16 @@ describe('transformImportStatements function', () => {
       );
 
       const expectedWritePath = `./dist/${sourceFilePath}`;
-      expect(result).toStrictEqual([expectedWritePath]);
+      expect(result).toStrictEqual({
+        filePath:
+          './dist/esm/workflow/logic/transform-imports/wildcard-aliases/transform-require-statements.js',
+        resolutions: [
+          {
+            alias: '@regex',
+            resolvedPath: './../../regex/regex.js',
+          },
+        ],
+      });
       expect(writeFileStringMock).toHaveBeenCalledTimes(1);
       const writePath = writeFileStringMock.mock.calls[0][0];
       const transformedData = writeFileStringMock.mock.calls[0][1];

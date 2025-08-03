@@ -5,6 +5,7 @@ import { requirePathRegex } from '@regex';
 
 import { resolveFullPath } from '../../resolve-path/resolve-full-path.js';
 import type {
+  PathResolution,
   PathsAliasesEntries,
   TransformPathAliasesInFileArgs,
 } from '../types.js';
@@ -23,7 +24,7 @@ export const transformRequireStatements = (
     Effect.gen(function* () {
       const isFileAlias = pathsAliases[0].endsWith('/*') === false;
       if (isFileAlias) {
-        return;
+        return [];
       }
 
       const aliasWithoutEndWildcard = pathsAliases[0].slice(0, -1);
@@ -33,15 +34,17 @@ export const transformRequireStatements = (
         ),
       ];
       if (requireMatches.length === 0) {
-        return undefined;
+        return [];
       }
 
       const fs = yield* FileSystem;
       const targetWithoutEndWildcard = pathsAliases[1][0].slice(0, -1);
+      const resolutions: PathResolution[] = [];
       const fileContentWithTransformedPaths = requireMatches.reduce(
         (alteredFileContent, match) => {
           const fullPath = match[0];
           const subPath = match[1];
+
           const resolvedPath = resolveFullPath(
             rootDir,
             entryPoint,
@@ -49,6 +52,10 @@ export const transformRequireStatements = (
             `${targetWithoutEndWildcard}${subPath}`,
           );
 
+          resolutions.push({
+            alias: pathsAliases[0],
+            resolvedPath,
+          });
           return alteredFileContent.replace(
             fullPath,
             `require("${resolvedPath}")`,
@@ -60,7 +67,7 @@ export const transformRequireStatements = (
       const writePath = `${distPath}/${sourceFilePath}`;
       yield* fs.writeFileString(writePath, fileContentWithTransformedPaths);
 
-      return writePath;
+      return resolutions;
     }),
     Effect.withSpan('transform-require-statements', {
       attributes: {

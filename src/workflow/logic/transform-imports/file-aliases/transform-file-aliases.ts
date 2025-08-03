@@ -9,6 +9,7 @@ import {
 
 import { resolveFullPath } from '../../resolve-path/resolve-full-path.js';
 import type {
+  FileTransformResolution,
   PathsAliasesEntries,
   TransformPathAliasesInFileArgs,
 } from '../types.js';
@@ -28,12 +29,18 @@ export const transformFileAliases = (
         esmDynamicImportRegex(pathsAliases[0]),
       );
 
+      const filePath = `${args.distPath}/${args.sourceFilePath}`;
+      const fileResolutions: FileTransformResolution = {
+        filePath,
+        resolutions: [],
+      };
+
       const noMatch =
         requireMatch === null &&
         importMatch === null &&
         dynamicImportMatch === null;
       if (noMatch) {
-        return [];
+        return fileResolutions;
       }
 
       const fullPath = `./${args.sourceFilePath}`;
@@ -55,13 +62,21 @@ export const transformFileAliases = (
           `import('${resolvedPath}')`,
         );
 
-      const writePath = `${args.distPath}/${args.sourceFilePath}`;
       const fs = yield* FileSystem;
-      yield* fs.writeFileString(
-        `${args.distPath}/${args.sourceFilePath}`,
-        fileContentWithTransformedPaths,
-      );
-      return [writePath];
+      yield* fs.writeFileString(filePath, fileContentWithTransformedPaths);
+
+      const allMatches = [
+        ...(requireMatch ?? []),
+        ...(importMatch ?? []),
+        ...(dynamicImportMatch ?? []),
+      ];
+      resolvedPath;
+
+      fileResolutions.resolutions = allMatches.map(() => ({
+        alias: pathsAliases[0],
+        resolvedPath,
+      }));
+      return fileResolutions;
     }),
     Effect.withSpan('transform-file-aliases'),
   );
