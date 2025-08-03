@@ -20,7 +20,7 @@ describe('transformFileDependencies function', () => {
     );
 
     vi.mocked(transformPathAliasesInFile).mockImplementation(
-      (arg) => () => Effect.succeed([arg.sourceFilePath]),
+      (arg) => () => Effect.succeed(arg as never),
     );
 
     const { transformFileDependencies } = await import(
@@ -60,12 +60,60 @@ describe('transformFileDependencies function', () => {
     expect(vi.mocked(transformPathAliasesInFile).mock.calls).toMatchSnapshot();
     expect(result).toMatchInlineSnapshot(`
       [
-        "a/b/c.js",
-        "a/d.js",
-        "cool.js",
-        "a/b/c.d.ts",
-        "a/d.d.ts",
-        "cool.d.ts",
+        {
+          "distPath": "./dist",
+          "entryPoint": "cjs/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "a/b/c.js",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "cjs/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "a/d.js",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "cjs/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "cool.js",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "esm/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "a/b/c.js",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "esm/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "a/d.js",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "esm/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "cool.js",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "dts/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "a/b/c.d.ts",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "dts/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "a/d.d.ts",
+        },
+        {
+          "distPath": "./dist",
+          "entryPoint": "dts/index.js",
+          "rootDir": "./src",
+          "sourceFilePath": "cool.d.ts",
+        },
       ]
     `);
   });

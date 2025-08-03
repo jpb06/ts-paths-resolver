@@ -1,41 +1,54 @@
 import { Effect, pipe } from 'effect';
 
-import { displaySuccess } from '@dependencies/console/console.js';
+import {
+  displayAlterations,
+  displaySuccess,
+} from '@dependencies/console/console.js';
 import { validatePackageJson, validateTsConfig } from '@inputs';
 
 import { getFilesByEntryPoint } from './logic/get-files-by-entry-point.js';
+import { regroupByFile } from './logic/regroup-by-file.js';
 import { transformFileDependencies } from './logic/transform-imports/transform-file-dependencies.js';
 
 export type ResolveTsPathsArgs = {
-  distPath: string;
+  path: string;
   tsconfigPath: string;
-  packageJsonPath: string;
+  debug: boolean;
 };
 
 export const resolveTsPathsEffect = ({
-  distPath,
+  path,
   tsconfigPath,
-  packageJsonPath,
+  debug,
 }: ResolveTsPathsArgs) =>
   pipe(
     Effect.gen(function* () {
+      const packageJsonPath = `./${path}/package.json`;
+
       const [tsConfig, entryPoints] = yield* Effect.all(
         [validateTsConfig(tsconfigPath), validatePackageJson(packageJsonPath)],
         { concurrency: 'unbounded' },
       );
 
-      const filesByEntryPoint = yield* getFilesByEntryPoint(
-        distPath,
-        entryPoints,
-      );
-
+      const filesByEntryPoint = yield* getFilesByEntryPoint(path, entryPoints);
       const alteredFiles = yield* transformFileDependencies(
-        distPath,
+        path,
         tsConfig,
         filesByEntryPoint,
       );
 
-      yield* displaySuccess(alteredFiles.length);
+      const byFile = regroupByFile(alteredFiles);
+
+      yield* displaySuccess(
+        byFile.length,
+        byFile.flatMap((d) => d.resolutions).length,
+      );
+
+      if (debug) {
+        yield* displayAlterations(byFile);
+      }
     }),
-    Effect.withSpan('resolve-ts-paths'),
+    Effect.withSpan('resolve-ts-paths', {
+      attributes: { path, tsconfigPath, debug },
+    }),
   );

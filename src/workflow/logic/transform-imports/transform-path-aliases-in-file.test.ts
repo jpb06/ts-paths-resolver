@@ -6,6 +6,8 @@ import { ReadFileStringError } from '@tests/errors';
 import { makeFsTestLayer } from '@tests/layers';
 import { pathsAliasesMockData, transpiledCjsMockData } from '@tests/mock-data';
 
+import type { FileTransformResolution } from './types.js';
+
 vi.doMock('./wildcard-aliases/transform-wildcard-aliases.js');
 vi.doMock('./file-aliases/transform-file-aliases.js');
 
@@ -48,7 +50,14 @@ describe('transformPathAliasesInFile function', () => {
   });
 
   it('should call transformWildcardAliases', async () => {
-    const expectedResult = ['wildcard'];
+    const wildcardResult: FileTransformResolution = {
+      filePath: 'wildcardFilePath',
+      resolutions: [{ alias: 'wildcard', resolvedPath: 'wildcard' }],
+    };
+    const fileResult: FileTransformResolution = {
+      filePath: 'filePath',
+      resolutions: [{ alias: 'file', resolvedPath: 'file' }],
+    };
 
     const { transformWildcardAliases } = await import(
       './wildcard-aliases/transform-wildcard-aliases.js'
@@ -62,9 +71,11 @@ describe('transformPathAliasesInFile function', () => {
     });
 
     vi.mocked(transformWildcardAliases).mockReturnValueOnce(
-      Effect.succeed(expectedResult),
+      Effect.succeed(wildcardResult),
     );
-    vi.mocked(transformFileAliases).mockReturnValueOnce(Effect.succeed([]));
+    vi.mocked(transformFileAliases).mockReturnValueOnce(
+      Effect.succeed(fileResult),
+    );
 
     const { transformPathAliasesInFile } = await import(
       './transform-path-aliases-in-file.js'
@@ -84,11 +95,18 @@ describe('transformPathAliasesInFile function', () => {
 
     expect(transformWildcardAliases).toHaveBeenCalledTimes(1);
     expect(transformFileAliases).toHaveBeenCalledTimes(0);
-    expect(result).toStrictEqual(expectedResult);
+    expect(result).toStrictEqual(wildcardResult);
   });
 
   it('should call transformFileAliases', async () => {
-    const expectedResult = ['path'];
+    const wildcardResult: FileTransformResolution = {
+      filePath: 'wildcardFilePath',
+      resolutions: [{ alias: 'wildcard', resolvedPath: 'wildcard' }],
+    };
+    const fileResult: FileTransformResolution = {
+      filePath: 'filePath',
+      resolutions: [{ alias: 'file', resolvedPath: 'file' }],
+    };
 
     const { transformWildcardAliases } = await import(
       './wildcard-aliases/transform-wildcard-aliases.js'
@@ -101,9 +119,11 @@ describe('transformPathAliasesInFile function', () => {
       readFileString: Effect.succeed(transpiledCjsMockData),
     });
 
-    vi.mocked(transformWildcardAliases).mockReturnValueOnce(Effect.succeed([]));
+    vi.mocked(transformWildcardAliases).mockReturnValueOnce(
+      Effect.succeed(wildcardResult),
+    );
     vi.mocked(transformFileAliases).mockReturnValueOnce(
-      Effect.succeed(expectedResult),
+      Effect.succeed(fileResult),
     );
 
     const { transformPathAliasesInFile } = await import(
@@ -124,6 +144,6 @@ describe('transformPathAliasesInFile function', () => {
 
     expect(transformWildcardAliases).toHaveBeenCalledTimes(0);
     expect(transformFileAliases).toHaveBeenCalledTimes(1);
-    expect(result).toStrictEqual(expectedResult);
+    expect(result).toStrictEqual(fileResult);
   });
 });

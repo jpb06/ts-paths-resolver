@@ -1,14 +1,11 @@
-import { exec } from 'node:child_process';
-import { readFile } from 'node:fs/promises';
-import util from 'node:util';
+import { cp, readFile, rm } from 'node:fs/promises';
 
 import { NodeFileSystem } from '@effect/platform-node';
 import { parse } from 'comment-json';
 import { Effect, pipe } from 'effect';
 import { runPromise } from 'effect-errors';
-import { glob } from 'glob';
 import {
-  afterAll,
+  afterEach,
   beforeAll,
   beforeEach,
   describe,
@@ -17,19 +14,22 @@ import {
   vi,
 } from 'vitest';
 
-const execPromise = util.promisify(exec);
-
 import { displaySuccess } from '@dependencies/console/index.js';
+
+import { getTransformedFiles } from '../tests/helpers/index.js';
 
 vi.mock('@dependencies/console/console.js');
 
 describe('resolveTsPaths function', () => {
-  const distPath = './src/tests/mock-data/dist';
-  const packageJsonPath = './package.json';
   const tsconfigPath = './tsconfig.json';
+  const path = './src/tests/mock-data/dist';
   const tsPaths: string[] = [];
 
   beforeAll(async () => {
+    await cp('./src/tests/mock-data/frozen-dist', path, {
+      recursive: true,
+      force: true,
+    });
     vi.mocked(displaySuccess).mockImplementation(() => Effect.void);
 
     const tsconfigData = await readFile('./tsconfig.json', {
@@ -44,98 +44,47 @@ describe('resolveTsPaths function', () => {
     );
   });
 
-  beforeEach(async () => {
+  beforeEach(() => {
     vi.clearAllMocks();
-    await execPromise('rm -rf ./src/tests/mock-data/dist');
   });
 
-  afterAll(() => {
-    execPromise('rm -rf ./src/tests/mock-data/dist');
+  afterEach(async () => {
+    await rm(path, { recursive: true });
   });
 
-  it('should report no changes', async () => {
-    const { resolveTsPathsEffect } = await import(
-      './resolve-ts-paths.workflow.js'
-    );
-
-    await runPromise(
-      pipe(
-        resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
-        Effect.provide(NodeFileSystem.layer),
-      ),
-    );
-
-    expect(displaySuccess).toHaveBeenCalledWith(0);
-  });
-
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: test
   it('should translate import and require statements', async () => {
-    await execPromise(
-      'cp -R ./src/tests/mock-data/frozen-dist ./src/tests/mock-data/dist',
-    );
-
     const { resolveTsPathsEffect } = await import(
       './resolve-ts-paths.workflow.js'
     );
 
     await runPromise(
       pipe(
-        resolveTsPathsEffect({ distPath, packageJsonPath, tsconfigPath }),
+        resolveTsPathsEffect({ path, tsconfigPath, debug: false }),
         Effect.provide(NodeFileSystem.layer),
       ),
     );
 
-    expect(displaySuccess).toHaveBeenCalledWith(27);
+    expect(displaySuccess).toHaveBeenCalledWith(27, 35);
 
-    const cjsFiles = await glob('**/*.js', {
-      cwd: './src/tests/mock-data/dist/cjs',
-    });
-    expect(cjsFiles).toHaveLength(34);
-    const foundCjsRequires: string[] = [];
-    for (const file of cjsFiles) {
-      const path = `./src/tests/mock-data/dist/cjs/${file}`;
+    // commonjs
+    const cjs = await getTransformedFiles(path, 'cjs', tsPaths, (data, alias) =>
+      data.includes(`require("${alias}`),
+    );
+    expect(cjs.jsFiles).toHaveLength(34);
+    expect(cjs.foundStatements).toHaveLength(0);
 
-      const data = await readFile(path, { encoding: 'utf-8' });
-      for (const alias of tsPaths) {
-        if (data.includes(`require("${alias}`)) {
-          foundCjsRequires.push(`${path} - ${alias}`);
-        }
-      }
-    }
-    expect(foundCjsRequires).toHaveLength(0);
+    // esmodules
+    const esm = await getTransformedFiles(path, 'esm', tsPaths, (data, alias) =>
+      data.includes(`from '${alias}`),
+    );
+    expect(esm.jsFiles).toHaveLength(34);
+    expect(esm.foundStatements).toHaveLength(0);
 
-    const esmFiles = await glob('**/*.js', {
-      cwd: './src/tests/mock-data/dist/esm',
-    });
-    expect(esmFiles).toHaveLength(34);
-    const foundEsmImports: string[] = [];
-    for (const file of esmFiles) {
-      const path = `./src/tests/mock-data/dist/esm/${file}`;
-
-      const data = await readFile(path, { encoding: 'utf-8' });
-      for (const alias of tsPaths) {
-        if (data.includes(`from '${alias}`)) {
-          foundEsmImports.push(`${path} - ${alias}`);
-        }
-      }
-    }
-    expect(foundEsmImports).toHaveLength(0);
-
-    const dtsFiles = await glob('**/*.d.ts', {
-      cwd: './src/tests/mock-data/dist/dts',
-    });
-    expect(dtsFiles).toHaveLength(34);
-    const foundDtsImports: string[] = [];
-    for (const file of dtsFiles) {
-      const path = `./src/tests/mock-data/dist/dts/${file}`;
-
-      const data = await readFile(path, { encoding: 'utf-8' });
-      for (const alias of tsPaths) {
-        if (data.includes(`import("${alias}`)) {
-          foundDtsImports.push(`${path} - ${alias}`);
-        }
-      }
-    }
-    expect(foundDtsImports).toHaveLength(0);
+    // declaration files
+    const dts = await getTransformedFiles(path, 'dts', tsPaths, (data, alias) =>
+      data.includes(`import("${alias}`),
+    );
+    expect(dts.jsFiles).toHaveLength(34);
+    expect(dts.foundStatements).toHaveLength(0);
   });
 });

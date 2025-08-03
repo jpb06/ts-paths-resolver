@@ -39,29 +39,33 @@ npm i -D ts-paths-resolver
 ### 🔶 cli
 
 ```bash
-resolve-ts-paths -d [distPath] -tsc [tsconfigPath] -pj [packageJsonPath]
+resolve-ts-paths --path [distPath] --tsconfigPath [tsconfigPath] --debug [debug]
 
 Options:
-      --help     Show help                                             [boolean]
-      --version  Show version number                                   [boolean]
-  -d             The path to the repo                        [default: "./dist"]
-      --tsc      The height                         [default: "./tsconfig.json"]
-      --pj       The height                          [default: "./package.json"]
+  --help          Show help                                            [boolean]
+  --version       Show version number                                  [boolean]
+  --path          sources paths                              [default: "./dist"]
+  --tsconfigPath  tsconfig.json path                [default: "./tsconfig.json"]
+  --debug         display paths transforms                         [default: ""]
 
 Examples:
-  resolve-ts-paths -d ./dist -tsc ./tsconfig.json -pj ./package.json
+  resolve-ts-paths --path ./dist --tsconfigPath ./tsconfig.json --debug true
 ```
+
+If `debug` option is set to true, the resolutions will be displayed; for example:
+
+![debug](./docs/debug.png)
 
 ### 🧿 cjs
 
 ```bash
-bun resolve-ts-paths -d ./dist -tsc ./tsconfig.json -pj ./package.json
+bun resolve-ts-paths --path ./dist --tsconfigPath ./tsconfig.json
 ```
 
 ### 🧿 esm
 
 ```bash
-bun resolve-ts-paths-esm -d ./dist -tsc ./tsconfig.json -pj ./package.json
+bun resolve-ts-paths-esm --path ./dist --tsconfigPath ./tsconfig.json
 ```
 
 ### 🔶 node
@@ -71,12 +75,11 @@ import { resolveTsPaths } from 'ts-paths-resolver';
 
 const distPath = './dist';
 const tsconfigPath = './tsconfig.json';
-const packageJsonPath = './package.json';
 
 await resolveTsPaths({
   distPath,
   tsconfigPath,
-  packageJsonPath,
+  debug: true,
 });
 ```
 
@@ -93,7 +96,7 @@ await runPromise(
     resolveTsPathsEffect({
       distPath: 'dist',
       tsconfigPath: './tsconfig.json',
-      packageJsonPath: './package.json',
+      debug: true,
     }),
     Effect.provide(NodeFileSystem.layer)
   )
@@ -106,7 +109,22 @@ This module takes the following input to translate paths aliases import/require 
 
 ### 🧿 dist folder
 
-The transpiled code location.
+The transpiled code location. A `package.json` file is expected to be present at dist folder root, containing the following attributes:
+
+- `main`: `cjs` entry point.
+- `module`: `esm` entry point.
+- `types`: declaration files entry point.
+
+Example:
+
+```json
+{
+  "main": "./cjs/index.js",
+  "module": "./esm/index.js",
+  "types": "./dts/index.d.ts"
+  // ...
+}
+```
 
 ### 🧿 `tsconfig.json`
 
@@ -123,20 +141,5 @@ The transpiled code location.
       "@regex": ["./src/util/regex/regex.ts"]
     }
   }
-}
-```
-
-### 🧿 `package.json`
-
-- `main`: `cjs` entry point.
-- `module`: `esm` entry point.
-- `types`: declaration files entry point.
-
-```json
-{
-  "main": "./cjs/index.js",
-  "module": "./esm/index.js",
-  "types": "./dts/index.d.ts"
-  // ...
 }
 ```

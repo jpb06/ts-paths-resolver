@@ -17,12 +17,13 @@ export const replaceImports = (
       const importMatches = Array.from(fileContent.matchAll(regex));
       const hasNoMatches = importMatches.length === 0;
       if (hasNoMatches) {
-        return false;
+        return [];
       }
 
       let data = fileContent;
       const fs = yield* FileSystem;
 
+      const resolvedPaths: string[] = [];
       for (const match of importMatches) {
         const fullPath = match[1];
         const subPath = match[2];
@@ -33,15 +34,16 @@ export const replaceImports = (
           `./${sourceFilePath}`,
           `${targetWithoutEndWildcard}${subPath}`,
         );
+        resolvedPaths.push(resolvedPath);
 
         data = data.replaceAll(fullPath, resolvedPath);
       }
 
       yield* fs.writeFileString(writePath, data);
 
-      return true;
+      return resolvedPaths;
     }),
-    Effect.withSpan('', {
+    Effect.withSpan('replace-imports', {
       attributes: {
         rootDir,
         entryPoint,

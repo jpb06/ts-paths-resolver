@@ -6,3 +6,13 @@ export type TransformPathAliasesInFileArgs = {
   sourceFilePath: string;
   entryPoint: string;
 };
+
+export type PathResolution = {
+  alias: string;
+  resolvedPath: string;
+};
+
+export type FileTransformResolution = {
+  filePath: string;
+  resolutions: PathResolution[];
+};

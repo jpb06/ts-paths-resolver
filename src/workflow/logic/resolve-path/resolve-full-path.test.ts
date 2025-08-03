@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { resolveFullPath } from './resolve-full-path.js';
 
 describe('resolveFullPath function', () => {
