@@ -52,7 +52,7 @@
     "sync-icons": "bun generateReadmeIcons -h 50"
   },
   "dependencies": {
-    "comment-json": "4.4.1",
+    "comment-json": "4.5.1",
     "effect-errors": "1.10.17",
     "glob": "13.0.0",
     "picocolors": "1.1.1",
