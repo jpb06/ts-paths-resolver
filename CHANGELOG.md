@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.5](https://github.com/jpb06/ts-paths-resolver/compare/v1.3.4...v1.3.5) (2026-02-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency glob to v13.0.1 ([#292](https://github.com/jpb06/ts-paths-resolver/issues/292)) ([20a3535](https://github.com/jpb06/ts-paths-resolver/commit/20a3535c024fc3f824cef2aada245cf6af5fabe8))
+
 ## [1.3.4](https://github.com/jpb06/ts-paths-resolver/compare/v1.3.3...v1.3.4) (2026-01-30)
 
 
